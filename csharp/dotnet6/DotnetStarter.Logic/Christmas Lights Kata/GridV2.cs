@@ -1,14 +1,14 @@
-using System;
+﻿using System;
 
 namespace GridLogic
 {
-    internal class Grid : IGridOperations
+    public class GridV2 : IGridOperations
     {
-        private readonly bool[,] _lights;
+        private readonly int[,] _lights;
 
-        public Grid(int width, int height)
+        public GridV2(int width, int height)
         {
-            this._lights = new bool[width, height];
+            this._lights = new int[width, height];
         }
 
         private int Width => this._lights.GetLength(0);
@@ -22,7 +22,7 @@ namespace GridLogic
             {
                 for (int y = startPosition.Item2; y <= endPosition.Item2; y++)
                 {
-                    this._lights[x, y] = true;
+                    this._lights[x, y]++;
                 }
             }
         }
@@ -33,7 +33,7 @@ namespace GridLogic
             {
                 for (int y = startPosition.Item2; y <= endPosition.Item2; y++)
                 {
-                    this._lights[x, y] = false;
+                    this._lights[x, y] = Math.Max(0, this._lights[x, y] - 1);
                 }
             }
         }
@@ -44,7 +44,7 @@ namespace GridLogic
             {
                 for (int y = startPosition.Item2; y <= endPosition.Item2; y++)
                 {
-                    this._lights[x, y] = !this._lights[x, y];
+                    this._lights[x, y] += 2;
                 }
             }
         }
@@ -56,13 +56,9 @@ namespace GridLogic
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    if (this._lights[x, y])
-                    {
-                        count++;
-                    }
+                    count += this._lights[x, y];
                 }
             }
-
             return count;
         }
     }
