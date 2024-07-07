@@ -11,7 +11,7 @@ namespace GridTests
         {
             var grid = GridFactory.CreateLightGrid(1000, 1000);
             Assert.Equal(1000000, grid.GetLightCount());
-            Assert.Equal(0, grid.HowManyLightsAreOn());
+            Assert.Equal(0, grid.GetTotalBrightness());
         }
 
 
@@ -25,7 +25,7 @@ namespace GridTests
             var grid = GridFactory.CreateLightGrid(1000, 1000);
             Tuple<int, int> startPosition = new(x1, y1), endPosition = new(x2, y2);
             grid.TurnOn(startPosition, endPosition);
-            Assert.Equal(expected, grid.HowManyLightsAreOn());
+            Assert.Equal(expected, grid.GetTotalBrightness());
         }
 
         [Theory]
@@ -43,7 +43,7 @@ namespace GridTests
 
             grid.TurnOn(firstPosition, lastPosition);
             grid.TurnOff(startPosition, endPosition);
-            Assert.Equal(1000000 - expected, grid.HowManyLightsAreOn());
+            Assert.Equal(1000000 - expected, grid.GetTotalBrightness());
         }
 
         [Theory]
@@ -56,10 +56,10 @@ namespace GridTests
             var grid = GridFactory.CreateLightGrid(1000, 1000);
             Tuple<int, int> startPosition = new(x1, y1), endPosition = new(x2, y2), firstPosition = new(0, 0), lastPosition = new(999, 999);
             grid.Toggle(startPosition, endPosition);
-            Assert.Equal(expected, grid.HowManyLightsAreOn());
+            Assert.Equal(expected, grid.GetTotalBrightness());
 
             grid.Toggle(firstPosition, lastPosition);
-            Assert.Equal(1000000 - expected, grid.HowManyLightsAreOn());
+            Assert.Equal(1000000 - expected, grid.GetTotalBrightness());
         }
 
         // exactly same as TestTurnOn
@@ -73,7 +73,7 @@ namespace GridTests
             var grid = GridFactory.CreateLightGrid(1000, 1000);
             Tuple<int, int> startPosition = new(x1, y1), endPosition = new(x2, y2);
             grid.TurnOn(startPosition, endPosition);
-            Assert.Equal(expected, grid.HowManyLightsAreOn());
+            Assert.Equal(expected, grid.GetTotalBrightness());
         }
     }
 }

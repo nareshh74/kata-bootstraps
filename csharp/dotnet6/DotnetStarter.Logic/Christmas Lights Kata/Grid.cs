@@ -49,7 +49,7 @@ namespace GridLogic
             }
         }
 
-        public int HowManyLightsAreOn()
+        public int GetTotalBrightness()
         {
             int count = 0;
             for (int x = 0; x < Width; x++)
