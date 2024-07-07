@@ -2,7 +2,7 @@ using System;
 
 namespace GridLogic
 {
-    public class Grid
+    internal class Grid : IGridOperations
     {
         private readonly bool[,] _lights;
 
@@ -11,8 +11,10 @@ namespace GridLogic
             this._lights = new bool[width, height];
         }
 
-        public int Width => this._lights.GetLength(0);
-        public int Height => this._lights.GetLength(1);
+        private int Width => this._lights.GetLength(0);
+        private int Height => this._lights.GetLength(1);
+
+        public int GetLightCount() => this.Width * this.Height;
 
         public void TurnOn(Tuple<int, int> startPosition, Tuple<int, int> endPosition)
         {
