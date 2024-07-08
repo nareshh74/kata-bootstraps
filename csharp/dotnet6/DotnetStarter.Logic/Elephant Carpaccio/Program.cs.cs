@@ -6,7 +6,12 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Program.WelcomeUser();
+        }
+
+        public static void WelcomeUser()
+        {
+            Console.WriteLine("Welcome User!");
         }
     }
 }

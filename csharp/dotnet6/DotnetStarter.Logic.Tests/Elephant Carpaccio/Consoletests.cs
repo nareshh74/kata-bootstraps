@@ -8,17 +8,17 @@ namespace ConsoleTests
     public class ConsoleTests
     {
         [Fact]
-        public void ShouldWriteHelloWorld()
+        public void ShouldWelcomeUser()
         {
             // Arrange
             var writer = new StringWriter();
             Console.SetOut(writer);
 
             // Act
-            Program.Main(new string[0]);
+            Program.WelcomeUser();
 
             // Assert
-            Assert.Equal("Hello, World!\r\n", writer.ToString());
+            Assert.Equal("Welcome User!\r\n", writer.ToString());
         }
     }
 }
