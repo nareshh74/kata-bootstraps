@@ -39,5 +39,11 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
         {
             Console.WriteLine($"The price of the item is {itemPrice}.");
         }
+
+        public static void OutputTotalPrice(int itemCount, decimal itemPrice)
+        {
+            decimal totalPrice = itemCount * itemPrice;
+            Console.WriteLine($"The total price is {totalPrice}.");
+        }
     }
 }
