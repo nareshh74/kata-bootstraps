@@ -105,34 +105,6 @@ namespace ConsoleTests
             Assert.Equal("The price of the item is 5.\r\n", writer.ToString());
         }
 
-        [Fact]
-        public void ShouldOutputTotalPrice()
-        {
-            // Arrange
-            var writer = new StringWriter();
-            Console.SetOut(writer);
-
-            // Act
-            Program.OutputTotalPrice(5, 5);
-
-            // Assert
-            Assert.Equal("The total price is 25.75.\r\n", writer.ToString());
-        }
-
-        [Fact]
-        public void ShouldOutputTotalPriceWithThreePercentTax()
-        {
-            // Arrange
-            var writer = new StringWriter();
-            Console.SetOut(writer);
-
-            // Act
-            Program.OutputTotalPrice(5, 5);
-
-            // Assert
-            Assert.Equal("The total price is 25.75.\r\n", writer.ToString());
-        }
-
         [Fact (Skip = "old behaviour")]
         public void ShouldOutputTotalPriceForCAStateCode()
         {
