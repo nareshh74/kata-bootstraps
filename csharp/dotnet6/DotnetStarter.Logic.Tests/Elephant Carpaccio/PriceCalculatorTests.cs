@@ -12,7 +12,7 @@ namespace DotnetStarter.Logic.Tests.Elephant_Carpaccio
             var itemCount = 5;
             var itemPrice = 5;
             var expectedTotalPrice = 25;
-            var calculator = new PriceCalculator();
+            var calculator = PriceCalculator.Create();
 
             // Act
             var result = calculator.GetTotalPrice(itemCount, itemPrice);

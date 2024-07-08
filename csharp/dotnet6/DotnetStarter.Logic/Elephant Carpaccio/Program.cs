@@ -42,7 +42,7 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
 
         public static void OutputTotalPrice(int itemCount, decimal itemPrice)
         {
-            decimal totalPrice = itemCount * itemPrice;
+            decimal totalPrice = PriceCalculator.Create().GetTotalPrice(itemCount, itemPrice);
             Console.WriteLine($"The total price is {totalPrice}.");
         }
     }
