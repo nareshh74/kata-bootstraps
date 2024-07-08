@@ -10,6 +10,7 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             int itemCount = Program.GetItemCount();
             Program.OutputItemCount(itemCount);
             decimal itemPrice = Program.GetItemPrice();
+            string stateCode = Program.GetStateCode();
             Program.OutputItemPrice(itemPrice);
         }
 
@@ -39,6 +40,11 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
         {
             Console.WriteLine("Enter the state code:");
             return Console.ReadLine();
+        }
+
+        public static void OutputStateCode(string stateCode)
+        {
+            Console.WriteLine($"The state code is {stateCode}.");
         }
 
         public static void OutputItemPrice(decimal itemPrice)

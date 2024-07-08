@@ -78,6 +78,20 @@ namespace ConsoleTests
         }
 
         [Fact]
+        public void ShouldOutputStateCodeWhichWasGivenAsInput()
+        {
+            // Arrange
+            var writer = new StringWriter();
+            Console.SetOut(writer);
+
+            // Act
+            Program.OutputStateCode("CA");
+
+            // Assert
+            Assert.Equal("The state code is CA.\r\n", writer.ToString());
+        }
+
+        [Fact]
         public void ShouldOutputItemPriceWhichWasGivenAsInput()
         {
             // Arrange
