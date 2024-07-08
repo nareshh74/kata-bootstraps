@@ -34,5 +34,19 @@ namespace ConsoleTests
             // Assert
             Assert.Equal(5, result);
         }
+
+        [Fact]
+        public void ShouldOutputItemCountWhichWasGivenAsInput()
+        {
+            // Arrange
+            var writer = new StringWriter();
+            Console.SetOut(writer);
+
+            // Act
+            Program.OutputItemCount(5);
+
+            // Assert
+            Assert.Equal("You have entered 5 items.\r\n", writer.ToString());
+        }
     }
 }

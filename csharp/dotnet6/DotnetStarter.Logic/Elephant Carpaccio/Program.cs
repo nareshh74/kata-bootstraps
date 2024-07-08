@@ -8,6 +8,7 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
         {
             Program.WelcomeUser();
             int itemCount = Program.GetItemCount();
+            Program.OutputItemCount(itemCount);
         }
 
         public static void WelcomeUser()
@@ -19,6 +20,11 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
         {
             Console.WriteLine("Enter the number of items:");
             return int.Parse(Console.ReadLine());
+        }
+
+        public static void OutputItemCount(int itemCount)
+        {
+            Console.WriteLine($"You have entered {itemCount} items.");
         }
     }
 }
