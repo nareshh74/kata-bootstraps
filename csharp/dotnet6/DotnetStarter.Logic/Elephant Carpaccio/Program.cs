@@ -9,6 +9,7 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             Program.WelcomeUser();
             int itemCount = Program.GetItemCount();
             Program.OutputItemCount(itemCount);
+            decimal itemPrice = Program.GetItemPrice();
         }
 
         public static void WelcomeUser()
@@ -25,6 +26,12 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
         public static void OutputItemCount(int itemCount)
         {
             Console.WriteLine($"You have entered {itemCount} items.");
+        }
+
+        public static decimal GetItemPrice()
+        {
+            Console.WriteLine("Enter the price of the item:");
+            return decimal.Parse(Console.ReadLine());
         }
     }
 }

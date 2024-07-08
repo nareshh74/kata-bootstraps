@@ -48,5 +48,19 @@ namespace ConsoleTests
             // Assert
             Assert.Equal("You have entered 5 items.\r\n", writer.ToString());
         }
+
+        [Fact]
+        public void ShouldGetItemPriceAsInputFromUser()
+        {
+            // Arrange
+            var reader = new StringReader("5");
+            Console.SetIn(reader);
+
+            // Act
+            var result = Program.GetItemPrice();
+
+            // Assert
+            Assert.Equal(5, result);
+        }
     }
 }
