@@ -2,18 +2,30 @@
 {
     public class PriceCalculator
     {
-        private PriceCalculator()
+        protected PriceCalculator()
         {
         }
 
         public static PriceCalculator Create()
         {
-            return new PriceCalculator();
+            return new PriceCalculatorWithDefaultTax();
         }
 
-        public decimal GetTotalPrice(int itemCount, decimal itemPrice)
+        public virtual decimal GetTotalPrice(int itemCount, decimal itemPrice)
         {
             return itemCount * itemPrice;
+        }
+    }
+
+    public class PriceCalculatorWithDefaultTax : PriceCalculator
+    {
+        internal PriceCalculatorWithDefaultTax() : base()
+        {
+        }
+
+        public override decimal GetTotalPrice(int itemCount, decimal itemPrice)
+        {
+            return base.GetTotalPrice(itemCount, itemPrice) * 1.03m;
         }
     }
 }

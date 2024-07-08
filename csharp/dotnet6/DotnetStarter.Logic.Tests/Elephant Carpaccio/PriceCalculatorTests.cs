@@ -5,13 +5,29 @@ namespace DotnetStarter.Logic.Tests.Elephant_Carpaccio
 {
     public class PriceCalculatorTests
     {
-        [Fact]
+        [Fact (Skip = "old behaviour")]
         public void ShouldReturnTotalPrice()
         {
             // Arrange
             var itemCount = 5;
             var itemPrice = 5;
             var expectedTotalPrice = 25;
+            var calculator = PriceCalculator.Create();
+
+            // Act
+            var result = calculator.GetTotalPrice(itemCount, itemPrice);
+
+            // Assert
+            Assert.Equal(expectedTotalPrice, result);
+        }
+
+        [Fact]
+        public void ShouldReturnTotalPriceWithThreePercentTax()
+        {
+            // Arrange
+            var itemCount = 5;
+            var itemPrice = 5;
+            var expectedTotalPrice = 25.75m;
             var calculator = PriceCalculator.Create();
 
             // Act
