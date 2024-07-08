@@ -20,5 +20,19 @@ namespace ConsoleTests
             // Assert
             Assert.Equal("Welcome User!\r\n", writer.ToString());
         }
+
+        [Fact]
+        public void ShouldGetItemCountAsInputFromUser()
+        {
+            // Arrange
+            var reader = new StringReader("5");
+            Console.SetIn(reader);
+
+            // Act
+            var result = Program.GetItemCount();
+
+            // Assert
+            Assert.Equal(5, result);
+        }
     }
 }
