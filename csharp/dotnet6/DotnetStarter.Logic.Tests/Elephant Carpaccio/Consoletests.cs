@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Xunit;
+using DotnetStarter.Logic.ElephantCarpaccio;
 
 namespace ConsoleTests
 {
