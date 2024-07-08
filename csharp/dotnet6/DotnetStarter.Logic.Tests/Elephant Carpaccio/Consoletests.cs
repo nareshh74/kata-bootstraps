@@ -64,6 +64,20 @@ namespace ConsoleTests
         }
 
         [Fact]
+        public void ShouldGetStateCodeAsInputFromUser()
+        {
+            // Arrange
+            var reader = new StringReader("CA");
+            Console.SetIn(reader);
+
+            // Act
+            var result = Program.GetStateCode();
+
+            // Assert
+            Assert.Equal("CA", result);
+        }
+
+        [Fact]
         public void ShouldOutputItemPriceWhichWasGivenAsInput()
         {
             // Arrange

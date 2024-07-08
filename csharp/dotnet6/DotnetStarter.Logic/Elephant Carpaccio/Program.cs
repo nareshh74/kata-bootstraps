@@ -35,6 +35,12 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             return decimal.Parse(Console.ReadLine());
         }
 
+        public static string GetStateCode()
+        {
+            Console.WriteLine("Enter the state code:");
+            return Console.ReadLine();
+        }
+
         public static void OutputItemPrice(decimal itemPrice)
         {
             Console.WriteLine($"The price of the item is {itemPrice}.");
