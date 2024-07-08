@@ -12,7 +12,7 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             decimal itemPrice = Program.GetItemPrice();
             Program.OutputItemPrice(itemPrice);
             string stateCode = Program.GetStateCode();
-            Program.OutputItemPrice(itemPrice);
+            Program.OutputStateCode(stateCode);
             Program.OutputTotalPrice(itemCount, itemPrice);
         }
 
