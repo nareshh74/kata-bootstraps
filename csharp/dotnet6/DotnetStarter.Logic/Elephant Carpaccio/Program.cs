@@ -59,5 +59,11 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             decimal totalPrice = PriceCalculator.Create().GetTotalPrice(itemCount, itemPrice);
             Console.WriteLine($"The total price is {totalPrice}.");
         }
+
+        public static void OutputTotalPriceV2(int itemCount, decimal itemPrice, string stateCode)
+        {
+            decimal totalPrice = PriceCalculator.Create(stateCode).GetTotalPrice(itemCount, itemPrice);
+            Console.WriteLine($"The total price is {totalPrice}.");
+        }
     }
 }

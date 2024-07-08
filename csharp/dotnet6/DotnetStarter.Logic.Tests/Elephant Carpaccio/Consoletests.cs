@@ -132,5 +132,35 @@ namespace ConsoleTests
             // Assert
             Assert.Equal("The total price is 25.75.\r\n", writer.ToString());
         }
+
+        [Fact]
+        public void ShouldOutputTotalPriceForCAStateCode()
+        {
+            // Arrange
+            var writer = new StringWriter();
+            Console.SetOut(writer);
+
+            // Act
+            Program.OutputTotalPriceV2(5, 5, "CA");
+
+            // Assert
+            Assert.Equal("The total price is 27.0625.\r\n", writer.ToString());
+        }
+
+        [Fact]
+        public void ShouldThrowExceptionForInvalidStateCode()
+        {
+            // Arrange
+            var writer = new StringWriter();
+            Console.SetOut(writer);
+
+            // Act
+            var exception = Record.Exception(() => Program.OutputTotalPriceV2(5, 5, "TX"));
+
+            // Assert
+            Assert.NotNull(exception);
+            Assert.IsType<ArgumentException>(exception);
+            Assert.Equal("Invalid state code (Parameter 'stateCode')", exception.Message);
+        }
     }
 }
