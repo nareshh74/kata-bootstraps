@@ -10,8 +10,10 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             int itemCount = Program.GetItemCount();
             Program.OutputItemCount(itemCount);
             decimal itemPrice = Program.GetItemPrice();
+            Program.OutputItemPrice(itemPrice);
             string stateCode = Program.GetStateCode();
             Program.OutputItemPrice(itemPrice);
+            Program.OutputTotalPrice(itemCount, itemPrice);
         }
 
         public static void WelcomeUser()
