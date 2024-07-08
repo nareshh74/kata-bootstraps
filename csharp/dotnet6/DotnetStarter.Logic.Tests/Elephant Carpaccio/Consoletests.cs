@@ -62,5 +62,19 @@ namespace ConsoleTests
             // Assert
             Assert.Equal(5, result);
         }
+
+        [Fact]
+        public void ShouldOutputItemPriceWhichWasGivenAsInput()
+        {
+            // Arrange
+            var writer = new StringWriter();
+            Console.SetOut(writer);
+
+            // Act
+            Program.OutputItemPrice(5);
+
+            // Assert
+            Assert.Equal("The price of the item is 5.\r\n", writer.ToString());
+        }
     }
 }
