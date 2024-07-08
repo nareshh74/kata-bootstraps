@@ -13,7 +13,7 @@ namespace DotnetStarter.Logic.ElephantCarpaccio
             Program.OutputItemPrice(itemPrice);
             string stateCode = Program.GetStateCode();
             Program.OutputStateCode(stateCode);
-            Program.OutputTotalPrice(itemCount, itemPrice);
+            Program.OutputTotalPriceV2(itemCount, itemPrice, stateCode);
         }
 
         public static void WelcomeUser()
