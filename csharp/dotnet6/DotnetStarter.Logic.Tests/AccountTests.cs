@@ -143,8 +143,8 @@ namespace BankingKataTests
             var transactions = account.GetTransactions();
 
             // Assert
-            Assert.Equal(DateTime.UtcNow.Date, transactions[0].Date);
-            Assert.Equal(DateTime.UtcNow.Date, transactions[1].Date);
+            Assert.Equal(DateOnly.FromDateTime(DateTime.UtcNow), transactions[0].Date);
+            Assert.Equal(DateOnly.FromDateTime(DateTime.UtcNow), transactions[1].Date);
         }
     }
 }
