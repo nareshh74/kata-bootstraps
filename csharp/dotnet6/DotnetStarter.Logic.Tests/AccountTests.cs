@@ -130,5 +130,21 @@ namespace BankingKataTests
             Assert.Equal(100, transactions[0].Amount);
             Assert.Equal(50, transactions[1].Amount);
         }
+
+        [Fact]
+        public void GetTransactions_ShouldReturnTransactionsWithCorrectDate()
+        {
+            // Arrange
+            var account = new Account();
+            account.Deposit(100);
+            account.Withdraw(50);
+
+            // Act
+            var transactions = account.GetTransactions();
+
+            // Assert
+            Assert.Equal(DateTime.UtcNow.Date, transactions[0].Date);
+            Assert.Equal(DateTime.UtcNow.Date, transactions[1].Date);
+        }
     }
 }
