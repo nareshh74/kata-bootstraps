@@ -1,3 +1,4 @@
+using BankingKata;
 using Xunit;
 
 namespace BankingKataTests
@@ -16,9 +17,9 @@ namespace BankingKataTests
 
             // Assert
             var transactions = account.GetTransactions();
-            Assert.Equal(1, transactions.Count());
+            Assert.Single(transactions);
             Assert.Equal(amount, transactions[0].Amount);
-            Assert.Equal(TransactionType.Credit, transactions[0].Amount);
+            Assert.Equal(TransactionType.Credit, transactions[0].Type);
         }
     }
 }
