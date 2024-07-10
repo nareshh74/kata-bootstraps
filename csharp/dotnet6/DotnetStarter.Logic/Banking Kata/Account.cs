@@ -20,5 +20,10 @@ namespace BankingKata
         {
             return this._transactions.AsReadOnly();
         }
+
+        public void Withdraw(int amount)
+        {
+            this._transactions.Add(new Transaction(TransactionType.Debit, amount));
+        }
     }
 }
