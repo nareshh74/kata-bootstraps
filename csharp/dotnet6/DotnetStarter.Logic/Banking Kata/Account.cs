@@ -4,14 +4,21 @@ namespace BankingKata
 {
     public class Account
     {
+        private readonly List<Transaction> _transactions;
+
+        public Account()
+        {
+            this._transactions = new List<Transaction>();
+        }
+
         public void Deposit(int amount)
         {
-            throw new System.NotImplementedException();
+            this._transactions.Add(new Transaction(TransactionType.Credit, amount));
         }
 
         public List<Transaction> GetTransactions()
         {
-            throw new System.NotImplementedException();
+            return this._transactions;
         }
     }
 }
