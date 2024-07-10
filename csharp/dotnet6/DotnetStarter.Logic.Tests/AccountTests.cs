@@ -1,5 +1,6 @@
 using BankingKata;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace BankingKataTests
@@ -29,15 +30,17 @@ namespace BankingKataTests
             // Arrange
             var account = new Account();
             var amount = 100;
+            account.Deposit(amount);
 
             // Act
             account.Withdraw(amount);
 
             // Assert
             var transactions = account.GetTransactions();
-            Assert.Single(transactions);
-            Assert.Equal(amount, transactions[0].Amount);
-            Assert.Equal(TransactionType.Debit, transactions[0].Type);
+            var debitTransactions = transactions.Where(txn => txn.Type == TransactionType.Debit);
+            Assert.Single(debitTransactions);
+            Assert.Equal(amount, debitTransactions.First().Amount);
+            Assert.Equal(TransactionType.Debit, debitTransactions.First().Type);
         }
 
         [Fact]

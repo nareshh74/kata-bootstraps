@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace BankingKata
@@ -5,6 +6,7 @@ namespace BankingKata
     public class Account
     {
         private readonly List<Transaction> _transactions;
+        private int _currentBalance;
 
         public Account()
         {
@@ -14,6 +16,7 @@ namespace BankingKata
         public void Deposit(int amount)
         {
             this._transactions.Add(new Transaction(TransactionType.Credit, amount));
+            this._currentBalance += amount;
         }
 
         public IReadOnlyList<Transaction> GetTransactions()
@@ -23,7 +26,12 @@ namespace BankingKata
 
         public void Withdraw(int amount)
         {
+            if (this._currentBalance < amount)
+            {
+                throw new InvalidOperationException("Insufficient funds");
+            }
             this._transactions.Add(new Transaction(TransactionType.Debit, amount));
+            this._currentBalance -= amount;
         }
     }
 }
