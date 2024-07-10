@@ -16,9 +16,9 @@ namespace BankingKata
             this._transactions.Add(new Transaction(TransactionType.Credit, amount));
         }
 
-        public List<Transaction> GetTransactions()
+        public IReadOnlyList<Transaction> GetTransactions()
         {
-            return this._transactions;
+            return this._transactions.AsReadOnly();
         }
     }
 }
