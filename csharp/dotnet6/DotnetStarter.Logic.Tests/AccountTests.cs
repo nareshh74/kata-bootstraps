@@ -1,4 +1,5 @@
 using BankingKata;
+using System;
 using Xunit;
 
 namespace BankingKataTests
@@ -37,6 +38,20 @@ namespace BankingKataTests
             Assert.Single(transactions);
             Assert.Equal(amount, transactions[0].Amount);
             Assert.Equal(TransactionType.Debit, transactions[0].Type);
+        }
+
+        [Fact]
+        public void Withdraw_ShouldFailIfInsufficientFunds()
+        {
+            // Arrange
+            var account = new Account();
+            var amount = 100;
+
+            // Act
+            account.Deposit(amount);
+
+            // Assert
+            Assert.Throws<InvalidOperationException>(() => account.Withdraw(amount + 1));
         }
     }
 }
