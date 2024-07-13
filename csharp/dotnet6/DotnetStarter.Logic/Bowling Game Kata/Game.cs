@@ -1,20 +1,28 @@
+using System.Collections.Generic;
+
 namespace BowlingGameKata
 {
     public class Game
     {
-        public Frame[] Frames { get; }
+        public List<Frame> Frames { get; }
 
         public Game()
         {
-            Frames = new Frame[10];
-            for (int i = 0; i < Frames.Length; i++)
-            {
-                Frames[i] = new Frame();
-            }
+            this.Frames = new();
         }
 
         public void Roll(int knockedPinCount)
         {
+        }
+
+        public int GetScore()
+        {
+            if (this.Frames.Count != 10)
+            {
+                throw new System.InvalidOperationException();
+            }
+
+            return 0;
         }
     }
 
