@@ -1,8 +1,9 @@
+using BowlingGameKata;
 using Xunit;
 
 namespace BowlingGameTests
 {
-    public class Gametests
+    public class GameTests
     {
         [Fact]
         public void Game_Should_Have_10_Frames()
