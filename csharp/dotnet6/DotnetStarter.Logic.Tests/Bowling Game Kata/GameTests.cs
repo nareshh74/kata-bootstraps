@@ -53,7 +53,7 @@ namespace BowlingGameTests
         }
 
         [Fact]
-        public void GetScore_Should_Throw_If_10_Frames_not_Complete()
+        public void GetScore_Should_Throw_If_Game_not_Complete()
         {
             var game = new Game();
             Assert.Throws<InvalidOperationException>(() => game.GetScore());

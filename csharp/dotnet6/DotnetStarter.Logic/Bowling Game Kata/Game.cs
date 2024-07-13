@@ -30,7 +30,7 @@ namespace BowlingGameKata
 
         public int GetScore()
         {
-            if (this.Frames.Count != 10)
+            if (!this.IsComplete())
             {
                 throw new System.InvalidOperationException();
             }
