@@ -15,6 +15,11 @@ namespace BowlingGameKata
 
         public void Roll(int knockedPinCount)
         {
+            if (this.IsComplete())
+            {
+                throw new System.InvalidOperationException();
+            }
+
             var currentFrame = this.Frames.Last();
             currentFrame.Roll(knockedPinCount);
             if (currentFrame.IsComplete())

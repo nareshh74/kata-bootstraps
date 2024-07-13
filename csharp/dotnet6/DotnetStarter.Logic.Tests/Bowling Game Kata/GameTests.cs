@@ -34,6 +34,17 @@ namespace BowlingGameTests
         }
 
         [Fact]
+        public void Should_Not_Support_Roll_After_Game_Completes()
+        {
+            var game = new Game();
+            for (int i = 0; i < 18; i++)
+            {
+                game.Roll(4);
+            }
+            Assert.Throws<InvalidOperationException>(() => game.Roll(4));
+        }
+
+        [Fact]
         public void Should_Support_Roll()
         {
             var game = new Game();
