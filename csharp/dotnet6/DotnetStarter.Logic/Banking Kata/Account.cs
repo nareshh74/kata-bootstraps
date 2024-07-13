@@ -15,8 +15,11 @@ namespace BankingKata
 
         public void Deposit(int amount)
         {
-            this._transactions.Add(new Transaction(TransactionType.Credit, amount, DateOnly.FromDateTime(DateTime.UtcNow)));
             this._currentBalance += amount;
+            this._transactions.Add(new Transaction(TransactionType.Credit,
+                amount,
+                DateOnly.FromDateTime(DateTime.UtcNow),
+                this._currentBalance));
         }
 
         public IReadOnlyList<Transaction> GetTransactions()
@@ -30,8 +33,11 @@ namespace BankingKata
             {
                 throw new InvalidOperationException("Insufficient funds");
             }
-            this._transactions.Add(new Transaction(TransactionType.Debit, amount, DateOnly.FromDateTime(DateTime.UtcNow)));
             this._currentBalance -= amount;
+            this._transactions.Add(new Transaction(TransactionType.Debit,
+                amount,
+                DateOnly.FromDateTime(DateTime.UtcNow),
+                this._currentBalance));
         }
     }
 }
