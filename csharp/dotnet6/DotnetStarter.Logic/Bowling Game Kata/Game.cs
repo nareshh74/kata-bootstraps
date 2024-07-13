@@ -12,6 +12,10 @@ namespace BowlingGameKata
                 Frames[i] = new Frame();
             }
         }
+
+        public void Roll(int knockedPinCount)
+        {
+        }
     }
 
     public class Frame
