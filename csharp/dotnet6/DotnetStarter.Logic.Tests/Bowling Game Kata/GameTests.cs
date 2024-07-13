@@ -45,14 +45,6 @@ namespace BowlingGameTests
         }
 
         [Fact]
-        public void Should_Support_Roll()
-        {
-            var game = new Game();
-            game.Roll(5);
-            Assert.True(true);
-        }
-
-        [Fact]
         public void GetScore_Should_Throw_If_Game_not_Complete()
         {
             var game = new Game();
