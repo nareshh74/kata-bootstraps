@@ -32,6 +32,11 @@ namespace BowlingGameKata
 
             return 0;
         }
+
+        public bool IsComplete()
+        {
+            return this.Frames.Count == 10;
+        }
     }
 
     public class Frame
