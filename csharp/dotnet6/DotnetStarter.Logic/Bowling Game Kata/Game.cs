@@ -9,6 +9,7 @@ namespace BowlingGameKata
         public Game()
         {
             this.Frames = new();
+            this.Frames.Add(new Frame());
         }
 
         public void Roll(int knockedPinCount)

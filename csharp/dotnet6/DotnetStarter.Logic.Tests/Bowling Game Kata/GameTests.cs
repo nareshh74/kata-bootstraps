@@ -6,12 +6,11 @@ namespace BowlingGameTests
 {
     public class GameTests
     {
-        // ignore
-        [Fact (Skip = "logic changed")]
-        public void Game_Should_Have_10_Frames()
+        [Fact]
+        public void New_Game_Should_Have_atleast_1_Frame()
         {
             var game = new Game();
-            Assert.Equal(10, game.Frames.Count);
+            Assert.Single(game.Frames);
         }
 
         [Fact]
