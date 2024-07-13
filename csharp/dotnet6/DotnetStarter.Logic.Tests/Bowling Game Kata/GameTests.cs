@@ -14,6 +14,15 @@ namespace BowlingGameTests
         }
 
         [Fact]
+        public void Should_Start_Next_Frame_After_2_Rolls()
+        {
+            var game = new Game();
+            game.Roll(5);
+            game.Roll(4);
+            Assert.Equal(2, game.Frames.Count);
+        }
+
+        [Fact]
         public void Should_Support_Roll()
         {
             var game = new Game();

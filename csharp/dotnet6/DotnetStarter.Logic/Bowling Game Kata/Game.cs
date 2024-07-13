@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BowlingGameKata
 {
@@ -14,6 +15,12 @@ namespace BowlingGameKata
 
         public void Roll(int knockedPinCount)
         {
+            var currentFrame = this.Frames.Last();
+            currentFrame.Roll(knockedPinCount);
+            if (currentFrame.IsComplete())
+            {
+                this.Frames.Add(new Frame());
+            }
         }
 
         public int GetScore()
@@ -29,5 +36,31 @@ namespace BowlingGameKata
 
     public class Frame
     {
+        public List<Roll> Rolls { get; }
+
+        public Frame()
+        {
+            this.Rolls = new();
+        }
+
+        public void Roll(int knockedPinCount)
+        {
+            this.Rolls.Add(new Roll(knockedPinCount));
+        }
+
+        public bool IsComplete()
+        {
+            return this.Rolls.Count == 2;
+        }
+    }
+
+    public class Roll
+    {
+        public int KnockedPinCount { get; }
+
+        public Roll(int knockedPinCount)
+        {
+            this.KnockedPinCount = knockedPinCount;
+        }
     }
 }
