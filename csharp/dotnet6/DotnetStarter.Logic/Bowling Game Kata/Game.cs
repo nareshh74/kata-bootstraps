@@ -40,7 +40,7 @@ namespace BowlingGameKata
 
         public bool IsComplete()
         {
-            return this.Frames.Count == 10;
+            return this.Frames.Count == 11;
         }
     }
 

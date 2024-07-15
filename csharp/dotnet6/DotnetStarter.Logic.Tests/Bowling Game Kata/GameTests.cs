@@ -31,7 +31,7 @@ namespace BowlingGameTests
             public void Should_Throw_Roll_After_Game_Completes()
             {
                 var game = new Game();
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     game.Roll(4);
                 }
@@ -45,7 +45,7 @@ namespace BowlingGameTests
             public void Should_Complete_After_10_Frames()
             {
                 var game = new Game();
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     game.Roll(4);
                 }
@@ -66,11 +66,11 @@ namespace BowlingGameTests
             public void Should_Return_Correct_Score()
             {
                 var game = new Game();
-                for (int i = 0; i < 18; i++)
+                for (int i = 0; i < 20; i++)
                 {
                     game.Roll(4);
                 }
-                Assert.Equal(72, game.GetScore());
+                Assert.Equal(80, game.GetScore());
             }
         }
     }
