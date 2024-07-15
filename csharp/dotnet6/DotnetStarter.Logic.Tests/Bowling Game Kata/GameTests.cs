@@ -65,7 +65,7 @@ namespace BowlingGameTests
             }
 
             [Fact]
-            public void Should_Return_Correct_Score()
+            public void Should_Return_Correct_Score_For_Normal_Rolls()
             {
                 var game = new Game();
                 GameTests.Complete_Game_With_Normal_Rolls(game);
