@@ -6,6 +6,14 @@ namespace BowlingGameTests
 {
     public class GameTests
     {
+        private static void Complete_Gam_With_Normal_Rolls(Game game)
+        {
+            for (int i = 0; i < 20; i++)
+            {
+                game.Roll(4);
+            }
+        }
+
         public class Ctor
         {
             [Fact]
@@ -31,10 +39,7 @@ namespace BowlingGameTests
             public void Should_Throw_Roll_After_Game_Completes()
             {
                 var game = new Game();
-                for (int i = 0; i < 20; i++)
-                {
-                    game.Roll(4);
-                }
+                GameTests.Complete_Gam_With_Normal_Rolls(game);
                 Assert.Throws<InvalidOperationException>(() => game.Roll(4));
             }
         }
@@ -45,10 +50,7 @@ namespace BowlingGameTests
             public void Should_Complete_After_10_Frames()
             {
                 var game = new Game();
-                for (int i = 0; i < 20; i++)
-                {
-                    game.Roll(4);
-                }
+                GameTests.Complete_Gam_With_Normal_Rolls(game);
                 Assert.True(game.IsComplete());
             }
         }
@@ -66,10 +68,7 @@ namespace BowlingGameTests
             public void Should_Return_Correct_Score()
             {
                 var game = new Game();
-                for (int i = 0; i < 20; i++)
-                {
-                    game.Roll(4);
-                }
+                GameTests.Complete_Gam_With_Normal_Rolls(game);
                 Assert.Equal(80, game.GetScore());
             }
         }
