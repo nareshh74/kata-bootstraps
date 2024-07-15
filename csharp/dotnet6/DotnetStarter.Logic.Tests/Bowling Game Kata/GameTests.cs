@@ -61,6 +61,17 @@ namespace BowlingGameTests
                 var game = new Game();
                 Assert.Throws<InvalidOperationException>(() => game.GetScore());
             }
+
+            [Fact]
+            public void Should_Return_Correct_Score()
+            {
+                var game = new Game();
+                for (int i = 0; i < 18; i++)
+                {
+                    game.Roll(4);
+                }
+                Assert.Equal(72, game.GetScore());
+            }
         }
     }
 

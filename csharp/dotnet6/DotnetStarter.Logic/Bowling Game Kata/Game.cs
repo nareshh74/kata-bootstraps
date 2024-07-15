@@ -35,7 +35,7 @@ namespace BowlingGameKata
                 throw new System.InvalidOperationException();
             }
 
-            return 0;
+            return this.Frames.Sum(frame => frame.GetScore());
         }
 
         public bool IsComplete()
@@ -62,6 +62,11 @@ namespace BowlingGameKata
         {
             return this.Rolls.Count == 2;
         }
+
+        public int GetScore()
+        {
+            return this.Rolls.Sum(roll => roll.GetScore());
+        }
     }
 
     public class Roll
@@ -71,6 +76,11 @@ namespace BowlingGameKata
         public Roll(int knockedPinCount)
         {
             this.KnockedPinCount = knockedPinCount;
+        }
+
+        public int GetScore()
+        {
+            return this.KnockedPinCount;
         }
     }
 }
