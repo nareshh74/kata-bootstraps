@@ -71,6 +71,17 @@ namespace BowlingGameTests
                 GameTests.Complete_Game_With_Normal_Rolls(game);
                 Assert.Equal(80, game.GetScore());
             }
+
+            [Fact]
+            public void Should_Return_Correct_Score_For_Spare()
+            {
+                var game = new Game();
+                while (!game.IsComplete())
+                {
+                    game.Roll(5);
+                }
+                Assert.Equal(145, game.GetScore());
+            }
         }
     }
 

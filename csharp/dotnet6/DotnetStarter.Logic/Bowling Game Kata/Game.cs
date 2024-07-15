@@ -35,7 +35,17 @@ namespace BowlingGameKata
                 throw new System.InvalidOperationException();
             }
 
-            return this.Frames.Sum(frame => frame.GetScore());
+            var score = 0;
+            for (int i = 0; i < this.Frames.Count; i++)
+            {
+                var currentFrameScore = this.Frames[i].GetScore();
+                score += currentFrameScore;
+                if (currentFrameScore == 10 && i + 1 < 10)
+                {
+                    score += this.Frames[i + 1].GetFirstRollScore();
+                }
+            }
+            return score;
         }
 
         public bool IsComplete()
@@ -66,6 +76,11 @@ namespace BowlingGameKata
         public int GetScore()
         {
             return this.Rolls.Sum(roll => roll.GetScore());
+        }
+
+        public int GetFirstRollScore()
+        {
+            return this.Rolls.First().GetScore();
         }
     }
 
