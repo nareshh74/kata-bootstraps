@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using BowlingGameKata;
 using Xunit;
 
@@ -72,12 +73,22 @@ namespace BowlingGameTests
                 Assert.Equal(80, game.GetScore());
             }
 
-            [Fact]
-            public void Should_Return_Correct_Score_For_Spare()
+            [Theory]
+            [InlineData(10, 145)]
+            [InlineData(1, 86)]
+            [InlineData(5, 114)]
+            public void Should_Return_Correct_Score_For_Spare(int spareFrameCount, int expectedScore)
             {
                 var game = new Game();
-                GameTests.Complete_Game_With_Given_Roll_Value(game, 5);
-                Assert.Equal(145, game.GetScore());
+                for(int i = 0; i < spareFrameCount; i++)
+                {
+                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 5);
+                }
+                for(int i = 0; i < 10 - spareFrameCount; i++)
+                {
+                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 4);
+                }
+                Assert.Equal(expectedScore, game.GetScore());
             }
 
             [Fact]
@@ -87,6 +98,16 @@ namespace BowlingGameTests
                 GameTests.Complete_Game_With_Given_Roll_Value(game, 10);
                 Assert.Equal(270, game.GetScore());
             }
+        }
+
+        private static void Complete_Frame_With_Given_Roll_Value(Game game, int rollValue)
+        {
+            var currentFrame = game.Frames.Last();
+            do
+            {
+                game.Roll(rollValue);
+            }
+            while (!currentFrame.IsComplete());
         }
     }
 
