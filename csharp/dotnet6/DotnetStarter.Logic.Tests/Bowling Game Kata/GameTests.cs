@@ -8,7 +8,7 @@ namespace BowlingGameTests
     {
         private static void Complete_Game_With_Normal_Rolls(Game game)
         {
-            for (int i = 0; i < 20; i++)
+            while (!game.IsComplete())
             {
                 game.Roll(4);
             }
