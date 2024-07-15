@@ -15,6 +15,16 @@ namespace BowlingGameTests
             }
         }
 
+        private static void Complete_Frame_With_Given_Roll_Value(Game game, int rollValue)
+        {
+            var currentFrame = game.Frames.Last();
+            do
+            {
+                game.Roll(rollValue);
+            }
+            while (!currentFrame.IsComplete());
+        }
+
         public class Ctor
         {
             [Fact]
@@ -91,23 +101,23 @@ namespace BowlingGameTests
                 Assert.Equal(expectedScore, game.GetScore());
             }
 
-            [Fact]
-            public void Should_Return_Correct_Score_For_Strike()
+            [Theory]
+            [InlineData(10, 270)]
+            [InlineData(1, 90)]
+            [InlineData(5, 50 + 60 + 14 + 8 + 40)]
+            public void Should_Return_Correct_Score_For_Strike(int strikeFrameCount, int expectedScore)
             {
                 var game = new Game();
-                GameTests.Complete_Game_With_Given_Roll_Value(game, 10);
-                Assert.Equal(270, game.GetScore());
+                for(int i = 0; i < strikeFrameCount; i++)
+                {
+                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 10);
+                }
+                for(int i = 0; i < 10 - strikeFrameCount; i++)
+                {
+                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 4);
+                }
+                Assert.Equal(expectedScore, game.GetScore());
             }
-        }
-
-        private static void Complete_Frame_With_Given_Roll_Value(Game game, int rollValue)
-        {
-            var currentFrame = game.Frames.Last();
-            do
-            {
-                game.Roll(rollValue);
-            }
-            while (!currentFrame.IsComplete());
         }
     }
 
