@@ -6,11 +6,11 @@ namespace BowlingGameTests
 {
     public class GameTests
     {
-        private static void Complete_Game_With_Normal_Rolls(Game game)
+        private static void Complete_Game_With_Given_Roll_Value(Game game, int rollValue)
         {
             while (!game.IsComplete())
             {
-                game.Roll(4);
+                game.Roll(rollValue);
             }
         }
 
@@ -39,7 +39,7 @@ namespace BowlingGameTests
             public void Should_Throw_Roll_After_Game_Completes()
             {
                 var game = new Game();
-                GameTests.Complete_Game_With_Normal_Rolls(game);
+                GameTests.Complete_Game_With_Given_Roll_Value(game, 4);
                 Assert.Throws<InvalidOperationException>(() => game.Roll(4));
             }
         }
@@ -50,7 +50,7 @@ namespace BowlingGameTests
             public void Should_Complete_After_10_Frames()
             {
                 var game = new Game();
-                GameTests.Complete_Game_With_Normal_Rolls(game);
+                GameTests.Complete_Game_With_Given_Roll_Value(game, 4);
                 Assert.True(game.IsComplete());
             }
         }
@@ -68,7 +68,7 @@ namespace BowlingGameTests
             public void Should_Return_Correct_Score_For_Normal_Rolls()
             {
                 var game = new Game();
-                GameTests.Complete_Game_With_Normal_Rolls(game);
+                GameTests.Complete_Game_With_Given_Roll_Value(game, 4);
                 Assert.Equal(80, game.GetScore());
             }
 
@@ -76,10 +76,7 @@ namespace BowlingGameTests
             public void Should_Return_Correct_Score_For_Spare()
             {
                 var game = new Game();
-                while (!game.IsComplete())
-                {
-                    game.Roll(5);
-                }
+                GameTests.Complete_Game_With_Given_Roll_Value(game, 5);
                 Assert.Equal(145, game.GetScore());
             }
         }
