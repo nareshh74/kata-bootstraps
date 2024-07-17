@@ -10,7 +10,6 @@ namespace BowlingGameKata
         public Game()
         {
             this.Frames = new();
-            this.Frames.Add(new Frame());
         }
 
         public void Roll(int knockedPinCount)
@@ -20,12 +19,16 @@ namespace BowlingGameKata
                 throw new System.InvalidOperationException();
             }
 
-            var currentFrame = this.Frames.Last();
-            currentFrame.Roll(knockedPinCount);
-            if (currentFrame.IsComplete())
+            Frame previousFrame = this.Frames.LastOrDefault()
+                , currentFrame = previousFrame;
+
+            if(previousFrame?.IsComplete() ?? true)
             {
-                this.Frames.Add(new Frame());
+                this.Frames.Add(new Frame(this.Frames.Count));
+                currentFrame = this.Frames.Last();
             }
+
+            currentFrame.Roll(knockedPinCount);
         }
 
         public int GetScore()
@@ -71,26 +74,18 @@ namespace BowlingGameKata
 
         public bool IsComplete()
         {
-            if (this.Frames.Count < 11)
-            {
-                return false;
-            }
-
-            if (this.Frames.Count > 11)
-            {
-                return true;
-            }
-
-            return this.Frames[9].GetScore() != 10;
+            return this.Frames.Count == 10 && this.Frames.Last().IsComplete();
         }
     }
 
     public class Frame
     {
+        private readonly int _index;
         public List<Roll> Rolls { get; }
 
-        public Frame()
+        public Frame(int index)
         {
+            this._index = index;
             this.Rolls = new();
         }
 
@@ -101,7 +96,18 @@ namespace BowlingGameKata
 
         public bool IsComplete()
         {
-            return this.Rolls.Count == 2 || this.Rolls.First().GetScore() == 10;
+            // 10th frame
+            if (this._index == 9)
+            {
+                if (this.GetScore() >= 10)
+                {
+                    return this.Rolls.Count == 3;
+                }
+                return this.Rolls.Count == 2;
+            }
+
+            return this.Rolls.First().GetScore() == 10 // strike/spare
+                   || this.Rolls.Count == 2; // normal case
         }
 
         public int GetScore()
