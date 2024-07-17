@@ -8,7 +8,7 @@ public class Frame
     private readonly int _index;
     public List<Roll> Rolls { get; }
 
-    public Frame(int index)
+    private Frame(int index)
     {
         this._index = index;
         this.Rolls = new();
@@ -44,4 +44,9 @@ public class Frame
     {
         return this.Rolls.First().GetScore();
     }
+
+        public static Frame New(int frameIndex)
+        {
+            return new Frame(frameIndex);
+        }
 }

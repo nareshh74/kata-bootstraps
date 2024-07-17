@@ -24,7 +24,7 @@ namespace BowlingGameKata
 
             if(previousFrame?.IsComplete() ?? true)
             {
-                this.Frames.Add(new Frame(this.Frames.Count));
+                this.Frames.Add(Frame.New(this.Frames.Count));
                 currentFrame = this.Frames.Last();
             }
 
