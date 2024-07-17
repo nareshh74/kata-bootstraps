@@ -71,6 +71,7 @@ namespace BowlingGameTests
                 game.Roll(5);
                 game.Roll(5);
                 Assert.Equal(11, game.Frames.Count);
+                Assert.Equal(1, game.Frames.Last().Rolls.Count);
             }
         }
 
@@ -113,10 +114,12 @@ namespace BowlingGameTests
                 {
                     GameTests.Complete_Frame_With_Given_Roll_Value(game, 5);
                 }
-                for(int i = 0; i < 10 - spareFrameCount; i++)
+
+                while (!game.IsComplete())
                 {
                     GameTests.Complete_Frame_With_Given_Roll_Value(game, 4);
                 }
+
                 Assert.Equal(expectedScore, game.GetScore());
             }
 
@@ -131,7 +134,7 @@ namespace BowlingGameTests
                 {
                     GameTests.Complete_Frame_With_Given_Roll_Value(game, 10);
                 }
-                for(int i = 0; i < 10 - strikeFrameCount; i++)
+                while (!game.IsComplete())
                 {
                     GameTests.Complete_Frame_With_Given_Roll_Value(game, 4);
                 }
