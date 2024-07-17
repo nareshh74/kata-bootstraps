@@ -63,7 +63,7 @@ namespace BowlingGameTests
             }
 
             [Fact]
-            public void Should_allow_one_extra_roll_in_tenth_frame_if_spare_is_thrown()
+            public void Should_Allow_One_Extra_Roll_In_Tenth_Frame_If_Spare_Is_Thrown()
             {
                 var game = new Game();
                 GameTests.RollMany(game, 18, 4);
