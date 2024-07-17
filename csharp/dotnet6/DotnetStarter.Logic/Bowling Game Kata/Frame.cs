@@ -19,18 +19,8 @@ public class Frame
         this.Rolls.Add(new Roll(knockedPinCount));
     }
 
-    public bool IsComplete()
+    public virtual bool IsComplete()
     {
-        // 10th frame
-        if (this._index == 9)
-        {
-            if (this.GetScore() >= 10)
-            {
-                return this.Rolls.Count == 3;
-            }
-            return this.Rolls.Count == 2;
-        }
-
         return this.Rolls.First().GetScore() == 10 // strike/spare
                || this.Rolls.Count == 2; // normal case
     }
@@ -47,6 +37,24 @@ public class Frame
 
     public static Frame New(int frameIndex)
     {
+        if(frameIndex == 9)
+        {
+            return new TenthFrame(frameIndex);
+        }
         return new Frame(frameIndex);
+    }
+
+    private class TenthFrame : Frame
+    {
+        public TenthFrame(int index) : base(index) { }
+
+        public override bool IsComplete()
+        {
+            if (this.GetScore() >= 10)
+            {
+                return this.Rolls.Count == 3;
+            }
+            return this.Rolls.Count == 2;
+        }
     }
 }
