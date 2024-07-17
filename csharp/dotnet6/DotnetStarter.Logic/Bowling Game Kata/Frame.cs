@@ -5,12 +5,10 @@ namespace BowlingGameKata;
 
 public class Frame
 {
-    private readonly int _index;
     public List<Roll> Rolls { get; }
 
     private Frame(int index)
     {
-        this._index = index;
         this.Rolls = new();
     }
 
