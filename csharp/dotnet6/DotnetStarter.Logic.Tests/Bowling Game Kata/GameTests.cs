@@ -7,6 +7,14 @@ namespace BowlingGameTests
 {
     public class GameTests
     {
+        private static void RollMany(Game game, int rollCount, int rollValue)
+        {
+            for (int i = 0; i < rollCount; i++)
+            {
+                game.Roll(rollValue);
+            }
+        }
+
         private static void Complete_Game_With_Given_Roll_Value(Game game, int rollValue)
         {
             while (!game.IsComplete())
@@ -52,6 +60,17 @@ namespace BowlingGameTests
                 var game = new Game();
                 GameTests.Complete_Game_With_Given_Roll_Value(game, 4);
                 Assert.Throws<InvalidOperationException>(() => game.Roll(4));
+            }
+
+            [Fact]
+            public void Should_allow_one_extra_roll_in_tenth_frame_if_spare_is_thrown()
+            {
+                var game = new Game();
+                GameTests.RollMany(game, 18, 4);
+                game.Roll(5);
+                game.Roll(5);
+                game.Roll(5);
+                Assert.Equal(11, game.Frames.Count);
             }
         }
 

@@ -71,7 +71,17 @@ namespace BowlingGameKata
 
         public bool IsComplete()
         {
-            return this.Frames.Count == 11;
+            if (this.Frames.Count < 11)
+            {
+                return false;
+            }
+
+            if (this.Frames.Count > 11)
+            {
+                return true;
+            }
+
+            return this.Frames[9].GetScore() != 10;
         }
     }
 
