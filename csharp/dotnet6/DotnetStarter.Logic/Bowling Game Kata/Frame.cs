@@ -45,8 +45,8 @@ public class Frame
         return this.Rolls.First().GetScore();
     }
 
-        public static Frame New(int frameIndex)
-        {
-            return new Frame(frameIndex);
-        }
+    public static Frame New(int frameIndex)
+    {
+        return new Frame(frameIndex);
+    }
 }
