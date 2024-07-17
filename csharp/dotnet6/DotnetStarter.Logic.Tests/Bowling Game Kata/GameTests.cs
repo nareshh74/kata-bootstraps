@@ -63,6 +63,17 @@ namespace BowlingGameTests
                 Assert.Equal(10, game.Frames.Count);
                 Assert.Equal(3, game.Frames.Last().Rolls.Count);
             }
+
+            [Fact]
+            public void Should_Allow_One_Two_Rolls_Extra_In_Tenth_Frame_If_Strike_Is_Thrown()
+            {
+                var game = new Game();
+                GameTests.RollMany(game, 10, 10);
+                game.Roll(5);
+                game.Roll(5);
+                Assert.Equal(10, game.Frames.Count);
+                Assert.Equal(3, game.Frames.Last().Rolls.Count);
+            }
         }
 
         public class IsComplete
