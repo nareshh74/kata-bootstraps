@@ -7,7 +7,7 @@ public class Frame
 {
     public List<Roll> Rolls { get; }
 
-    private Frame(int index)
+    private Frame()
     {
         this.Rolls = new();
     }
@@ -37,14 +37,14 @@ public class Frame
     {
         if(frameIndex == 9)
         {
-            return new TenthFrame(frameIndex);
+            return new TenthFrame();
         }
-        return new Frame(frameIndex);
+        return new Frame();
     }
 
     private class TenthFrame : Frame
     {
-        public TenthFrame(int index) : base(index) { }
+        public TenthFrame() : base() { }
 
         public override bool IsComplete()
         {
