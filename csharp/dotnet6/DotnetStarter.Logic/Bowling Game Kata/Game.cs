@@ -12,14 +12,22 @@ namespace BowlingGameKata
 
         public Game()
         {
+            this.Frames = Game.CreateFrames().AsReadOnly();
+            this._currentFrameIndex = 0;
+        }
+
+        private static List<Frame> CreateFrames()
+        {
             var frames = new List<Frame>();
-            for (int i = 0; i < 10; i++)
+            Frame currentFrame = null, nextFrame = null;
+            for (int i = 9; i >= 0; i--)
             {
-                frames.Add(Frame.New(i));
+                currentFrame = Frame.New(i, nextFrame);
+                frames.Insert(0, currentFrame);
+                nextFrame = currentFrame;
             }
 
-            this.Frames = frames.AsReadOnly();
-            this._currentFrameIndex = 0;
+            return frames;
         }
 
         public void Roll(int knockedPinCount)
@@ -47,34 +55,7 @@ namespace BowlingGameKata
             var score = 0;
             for (int i = 0; i < 10; i++)
             {
-                var frame = this.Frames.ElementAt(i);
-                var currentFrameScore = frame.GetScore();
-                score += currentFrameScore;
-                if (currentFrameScore == 10 && i + 1 < 10)
-                {
-                    // spare
-                    if (frame.Rolls.Count == 2)
-                    {
-                        score += this.Frames.ElementAt(i + 1).GetFirstRollScore();
-                    }
-
-                    // strike
-                    else if (frame.Rolls.Count == 1)
-                    {
-                        score += this.Frames.ElementAt(i + 1).GetFirstRollScore();
-                        if (this.Frames.ElementAt(i + 1).Rolls.Count == 1)
-                        {
-                            if (i + 2 < 10)
-                            {
-                                score += this.Frames.ElementAt(i + 2).Rolls[0].GetScore();
-                            }
-                        }
-                        else
-                        {
-                            score += this.Frames.ElementAt(i + 1).Rolls[1].GetScore();
-                        }
-                    }
-                }
+                score += this.Frames.ElementAt(i).GetScore();
             }
             return score;
         }
