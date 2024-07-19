@@ -26,24 +26,15 @@ namespace BowlingGameTests
         public class Ctor
         {
             [Fact]
-            public void Should_Not_Have_any_Frames()
+            public void Should_Have_ten_Frames()
             {
                 var game = new Game();
-                Assert.Equal(0, game.Frames.Count);
+                Assert.Equal(10, game.Frames.Count);
             }
         }
 
         public class Roll
         {
-            [Fact]
-            public void Should_Start_Next_Frame_After_2_Rolls()
-            {
-                var game = new Game();
-                game.Roll(5);
-                game.Roll(4);
-                Assert.Equal(1, game.Frames.Count);
-            }
-
             [Fact]
             public void Should_Throw_Roll_After_Game_Completes()
             {

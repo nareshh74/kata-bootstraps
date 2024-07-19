@@ -19,8 +19,13 @@ public class Frame
 
     public virtual bool IsComplete()
     {
-        return this.Rolls.First().GetScore() == 10 // strike/spare
-               || this.Rolls.Count == 2; // normal case
+        // strike/spare
+        if (this.Rolls.Count > 0 && this.Rolls[0].GetScore() == 10)
+        {
+            return true;
+        }
+
+        return this.Rolls.Count == 2; // normal case
     }
 
     public int GetScore()

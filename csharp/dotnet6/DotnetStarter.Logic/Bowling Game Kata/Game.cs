@@ -6,12 +6,20 @@ namespace BowlingGameKata
     public class Game
     {
         private readonly List<Frame> _frames;
+        private int _currentFrameIndex;
 
-        public IReadOnlyCollection<Frame> Frames => this._frames.AsReadOnly();
+        public IReadOnlyCollection<Frame> Frames { get; }
 
         public Game()
         {
-            this._frames = new();
+            var frames = new List<Frame>();
+            for (int i = 0; i < 10; i++)
+            {
+                frames.Add(Frame.New(i));
+            }
+
+            this.Frames = frames.AsReadOnly();
+            this._currentFrameIndex = 0;
         }
 
         public void Roll(int knockedPinCount)
@@ -21,16 +29,12 @@ namespace BowlingGameKata
                 throw new System.InvalidOperationException();
             }
 
-            Frame previousFrame = this.Frames.LastOrDefault()
-                , currentFrame = previousFrame;
+            this.Frames.ElementAt(this._currentFrameIndex).Roll(knockedPinCount);
 
-            if(previousFrame?.IsComplete() ?? true)
+            if (this.Frames.ElementAt(this._currentFrameIndex).IsComplete())
             {
-                this._frames.Add(Frame.New(this.Frames.Count));
-                currentFrame = this.Frames.Last();
+                this._currentFrameIndex++;
             }
-
-            currentFrame.Roll(knockedPinCount);
         }
 
         public int GetScore()
@@ -43,30 +47,31 @@ namespace BowlingGameKata
             var score = 0;
             for (int i = 0; i < 10; i++)
             {
-                var currentFrameScore = this._frames[i].GetScore();
+                var frame = this.Frames.ElementAt(i);
+                var currentFrameScore = frame.GetScore();
                 score += currentFrameScore;
                 if (currentFrameScore == 10 && i + 1 < 10)
                 {
                     // spare
-                    if (this._frames[i].Rolls.Count == 2)
+                    if (frame.Rolls.Count == 2)
                     {
-                        score += this._frames[i + 1].GetFirstRollScore();
+                        score += this.Frames.ElementAt(i + 1).GetFirstRollScore();
                     }
 
                     // strike
-                    else if (this._frames[i].Rolls.Count == 1)
+                    else if (frame.Rolls.Count == 1)
                     {
-                        score += this._frames[i + 1].GetFirstRollScore();
-                        if (this._frames[i + 1].Rolls.Count == 1)
+                        score += this.Frames.ElementAt(i + 1).GetFirstRollScore();
+                        if (this.Frames.ElementAt(i + 1).Rolls.Count == 1)
                         {
                             if (i + 2 < 10)
                             {
-                                score += this._frames[i + 2].Rolls[0].GetScore();
+                                score += this.Frames.ElementAt(i + 2).Rolls[0].GetScore();
                             }
                         }
                         else
                         {
-                            score += this._frames[i + 1].Rolls[1].GetScore();
+                            score += this.Frames.ElementAt(i + 1).Rolls[1].GetScore();
                         }
                     }
                 }
@@ -76,7 +81,7 @@ namespace BowlingGameKata
 
         public bool IsComplete()
         {
-            return this._frames.Count == 10 && this._frames.Last().IsComplete();
+            return this._currentFrameIndex == 10;
         }
     }
 }
