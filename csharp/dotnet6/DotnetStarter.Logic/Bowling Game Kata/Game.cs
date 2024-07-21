@@ -12,17 +12,18 @@ namespace BowlingGameKata
 
         public Game()
         {
-            this.Frames = Game.CreateFrames().AsReadOnly();
+            var scoreCalculatorFactory = new ScoreCalculatorFactory();
+            this.Frames = Game.CreateFrames(scoreCalculatorFactory).AsReadOnly();
             this._currentFrameIndex = 0;
         }
 
-        private static List<Frame> CreateFrames()
+        private static List<Frame> CreateFrames(ScoreCalculatorFactory scoreCalculatorFactory)
         {
             var frames = new List<Frame>();
             Frame currentFrame = null, nextFrame = null;
             for (int i = 9; i >= 0; i--)
             {
-                currentFrame = Frame.New(i, nextFrame);
+                currentFrame = Frame.New(i, nextFrame, scoreCalculatorFactory);
                 frames.Insert(0, currentFrame);
                 nextFrame = currentFrame;
             }

@@ -6,11 +6,14 @@ namespace BowlingGameKata;
 public class Frame
 {
     private readonly Frame _nextFrame;
+    private readonly ScoreCalculatorFactory _scoreCalculatorFactory;
     public List<Roll> Rolls { get; }
+    public Frame NextFrame => this._nextFrame;
 
-    private Frame(Frame nextFrame)
+    private Frame(Frame nextFrame, ScoreCalculatorFactory scoreCalculatorFactory)
     {
         this._nextFrame = nextFrame;
+        this._scoreCalculatorFactory = scoreCalculatorFactory;
         this.Rolls = new();
     }
 
@@ -32,30 +35,7 @@ public class Frame
 
     public virtual int GetScore()
     {
-        int score = this.Rolls.Sum(roll => roll.GetScore());
-        if (score >= 10)
-        {
-            // spare
-            if (this.Rolls.Count == 2)
-            {
-                score += this._nextFrame.GetFirstRollScore();
-            }
-            // strike
-            else if (this.Rolls.Count == 1)
-            {
-                score += this._nextFrame.GetFirstRollScore();
-                if (this._nextFrame.Rolls.Count >= 2)
-                {
-                    score += this._nextFrame.Rolls[1].GetScore();
-                }
-                else if (this._nextFrame.Rolls.Count == 1 && this._nextFrame._nextFrame != null)
-                {
-                    score += this._nextFrame._nextFrame.GetFirstRollScore();
-                }
-            }
-        }
-
-        return score;
+        return this._scoreCalculatorFactory.Create(this).GetScore();
     }
 
     public int GetFirstRollScore()
@@ -63,18 +43,18 @@ public class Frame
         return this.Rolls.First().GetScore();
     }
 
-    public static Frame New(int frameIndex, Frame nextFrame)
+    public static Frame New(int frameIndex, Frame nextFrame, ScoreCalculatorFactory scoreCalculatorFactory)
     {
         if(frameIndex == 9)
         {
-            return new TenthFrame(nextFrame);
+            return new TenthFrame(nextFrame, scoreCalculatorFactory);
         }
-        return new Frame(nextFrame);
+        return new Frame(nextFrame, scoreCalculatorFactory);
     }
 
     private class TenthFrame : Frame
     {
-        public TenthFrame(Frame nextFrame) : base(nextFrame) { }
+        public TenthFrame(Frame nextFrame, ScoreCalculatorFactory scoreCalculatorFactory) : base(nextFrame, scoreCalculatorFactory) { }
 
         public override bool IsComplete()
         {
