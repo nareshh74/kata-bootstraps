@@ -7,6 +7,14 @@ namespace BowlingGameTests
 {
     public class GameTests
     {
+        private static void RollMany(Game game, int rollCount, int rollValue)
+        {
+            for (int i = 0; i < rollCount; i++)
+            {
+                game.Roll(rollValue);
+            }
+        }
+
         private static void Complete_Game_With_Given_Roll_Value(Game game, int rollValue)
         {
             while (!game.IsComplete())
@@ -15,43 +23,47 @@ namespace BowlingGameTests
             }
         }
 
-        private static void Complete_Frame_With_Given_Roll_Value(Game game, int rollValue)
-        {
-            var currentFrame = game.Frames.Last();
-            do
-            {
-                game.Roll(rollValue);
-            }
-            while (!currentFrame.IsComplete());
-        }
-
         public class Ctor
         {
             [Fact]
-            public void Should_Have_atleast_1_Frame()
+            public void Should_Have_ten_Frames()
             {
                 var game = new Game();
-                Assert.Single(game.Frames);
+                Assert.Equal(10, game.Frames.Count);
             }
         }
 
         public class Roll
         {
             [Fact]
-            public void Should_Start_Next_Frame_After_2_Rolls()
-            {
-                var game = new Game();
-                game.Roll(5);
-                game.Roll(4);
-                Assert.Equal(2, game.Frames.Count);
-            }
-
-            [Fact]
             public void Should_Throw_Roll_After_Game_Completes()
             {
                 var game = new Game();
                 GameTests.Complete_Game_With_Given_Roll_Value(game, 4);
                 Assert.Throws<InvalidOperationException>(() => game.Roll(4));
+            }
+
+            [Fact]
+            public void Should_Allow_One_Extra_Roll_In_Tenth_Frame_If_Spare_Is_Thrown()
+            {
+                var game = new Game();
+                GameTests.RollMany(game, 18, 4);
+                game.Roll(5);
+                game.Roll(5);
+                game.Roll(5);
+                Assert.Equal(10, game.Frames.Count);
+                Assert.Equal(3, game.Frames.Last().Rolls.Count);
+            }
+
+            [Fact]
+            public void Should_Allow_One_Two_Rolls_Extra_In_Tenth_Frame_If_Strike_Is_Thrown()
+            {
+                var game = new Game();
+                GameTests.RollMany(game, 10, 10);
+                game.Roll(5);
+                game.Roll(5);
+                Assert.Equal(10, game.Frames.Count);
+                Assert.Equal(3, game.Frames.Last().Rolls.Count);
             }
         }
 
@@ -84,7 +96,7 @@ namespace BowlingGameTests
             }
 
             [Theory]
-            [InlineData(10, 145)]
+            [InlineData(10, 100 + 45 + 4)]
             [InlineData(1, 86)]
             [InlineData(5, 114)]
             public void Should_Return_Correct_Score_For_Spare(int spareFrameCount, int expectedScore)
@@ -92,17 +104,20 @@ namespace BowlingGameTests
                 var game = new Game();
                 for(int i = 0; i < spareFrameCount; i++)
                 {
-                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 5);
+                    game.Roll(5);
+                    game.Roll(5);
                 }
-                for(int i = 0; i < 10 - spareFrameCount; i++)
+
+                while (!game.IsComplete())
                 {
-                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 4);
+                    game.Roll(4);
                 }
+
                 Assert.Equal(expectedScore, game.GetScore());
             }
 
             [Theory]
-            [InlineData(10, 270)]
+            [InlineData(10, 100 + 160 + 14 + 8)]
             [InlineData(1, 90)]
             [InlineData(5, 50 + 60 + 14 + 8 + 40)]
             public void Should_Return_Correct_Score_For_Strike(int strikeFrameCount, int expectedScore)
@@ -110,11 +125,11 @@ namespace BowlingGameTests
                 var game = new Game();
                 for(int i = 0; i < strikeFrameCount; i++)
                 {
-                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 10);
+                    game.Roll(10);
                 }
-                for(int i = 0; i < 10 - strikeFrameCount; i++)
+                while (!game.IsComplete())
                 {
-                    GameTests.Complete_Frame_With_Given_Roll_Value(game, 4);
+                    game.Roll(4);
                 }
                 Assert.Equal(expectedScore, game.GetScore());
             }
