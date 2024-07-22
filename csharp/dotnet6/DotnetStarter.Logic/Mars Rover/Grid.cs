@@ -1,14 +1,24 @@
+using System.Collections.Generic;
+
 namespace MarsRover;
 
 public class Grid
 {
+    private readonly List<Rover> _rovers;
     public int Width { get; }
     public int Height { get; }
+    public IReadOnlyList<Rover> Rovers => this._rovers.AsReadOnly();
 
     public Grid(int width, int height)
     {
         this.Width = width;
         this.Height = height;
+        this._rovers = new List<Rover>();
+    }
+
+    public void AddRover(Rover rover)
+    {
+        this._rovers.Add(rover);
     }
 }
 
