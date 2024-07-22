@@ -15,7 +15,8 @@ Grid
     int length
     int breadth
     list<Rover>
-
+    IsValid(Position) -> bool
+    AddRover(Rover)
 
 Rover
     Position
@@ -27,6 +28,7 @@ Position
     int x
     int y
     char direction
+
 
 
 
