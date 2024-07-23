@@ -20,6 +20,36 @@ public class Grid
     {
         this._rovers.Add(rover);
     }
+
+    public bool IsValid(Position position)
+    {
+        int x = position.X, y = position.Y;
+        var direction = position.Direction;
+
+        if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
+        {
+            return false;
+        }
+
+        if (x == 0 && direction == 'S')
+        {
+            return false;
+        }
+        if (y == 0 && direction == 'W')
+        {
+            return false;
+        }
+        if (x == this.Width - 1 && direction == 'N')
+        {
+            return false;
+        }
+        if (y == this.Height - 1 && direction == 'E')
+        {
+            return false;
+        }
+
+        return true;
+    }
 }
 
 public class Rover
