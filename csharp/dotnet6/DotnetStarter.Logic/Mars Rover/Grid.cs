@@ -76,6 +76,26 @@ public class Rover
             _ => this.Position
         };
     }
+
+    public void Turn(char direction)
+    {
+        var x = this.Position.X;
+        var y = this.Position.Y;
+        var currentDirection = this.Position.Direction;
+
+        this.Position = (currentDirection, direction) switch
+        {
+            ('N', 'L') => new Position(x, y, 'W'),
+            ('E', 'L') => new Position(x, y, 'N'),
+            ('S', 'L') => new Position(x, y, 'E'),
+            ('W', 'L') => new Position(x, y, 'S'),
+            ('N', 'R') => new Position(x, y, 'E'),
+            ('E', 'R') => new Position(x, y, 'S'),
+            ('S', 'R') => new Position(x, y, 'W'),
+            ('W', 'R') => new Position(x, y, 'N'),
+            _ => this.Position
+        };
+    }
 }
 
 public record Position

@@ -185,6 +185,41 @@ public class RoverTests
             Assert.Equal(rover.Position, expectedPosition);
         }
     }
+
+    public class Turn
+    {
+        [Theory]
+        [InlineData(1, 2, 'N', 1, 2, 'W')]
+        [InlineData(1, 2, 'E', 1, 2, 'N')]
+        [InlineData(1, 2, 'S', 1, 2, 'E')]
+        [InlineData(1, 2, 'W', 1, 2, 'S')]
+        public void Should_turn_left_to_expected_direction(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
+        {
+            var position = new Position(x, y, direction);
+            var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
+            var rover = new Rover(position);
+
+            rover.Turn('L');
+
+            Assert.Equal(rover.Position, expectedPosition);
+        }
+
+        [Theory]
+        [InlineData(1, 2, 'N', 1, 2, 'E')]
+        [InlineData(1, 2, 'E', 1, 2, 'S')]
+        [InlineData(1, 2, 'S', 1, 2, 'W')]
+        [InlineData(1, 2, 'W', 1, 2, 'N')]
+        public void Should_turn_right_to_expected_direction(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
+        {
+            var position = new Position(x, y, direction);
+            var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
+            var rover = new Rover(position);
+
+            rover.Turn('R');
+
+            Assert.Equal(rover.Position, expectedPosition);
+        }
+    }
 }
 
 public class PositionTests
