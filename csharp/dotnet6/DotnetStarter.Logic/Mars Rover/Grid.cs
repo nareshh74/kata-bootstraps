@@ -54,11 +54,27 @@ public class Grid
 
 public class Rover
 {
-    public Position Position { get; }
+    public Position Position { get; private set; }
 
     public Rover(Position position)
     {
         this.Position = position;
+    }
+
+    public void Move()
+    {
+        var x = this.Position.X;
+        var y = this.Position.Y;
+        var direction = this.Position.Direction;
+
+        this.Position = direction switch
+        {
+            'N' => new Position(x + 1, y, direction),
+            'E' => new Position(x, y + 1, direction),
+            'S' => new Position(x - 1, y, direction),
+            'W' => new Position(x, y - 1, direction),
+            _ => this.Position
+        };
     }
 }
 

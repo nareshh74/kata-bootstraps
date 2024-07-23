@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MarsRover;
 using Xunit;
 
 namespace MarsRover;
@@ -163,6 +164,25 @@ public class RoverTests
             var rover = new Rover(position);
 
             Assert.Equal(rover.Position, position);
+        }
+    }
+
+    public class Move
+    {
+        [Theory]
+        [InlineData(1, 2, 'N', 2, 2, 'N')]
+        [InlineData(1, 2, 'E', 1, 3, 'E')]
+        [InlineData(1, 2, 'S', 0, 2, 'S')]
+        [InlineData(1, 2, 'W', 1, 1, 'W')]
+        public void Should_move_to_expected_position(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
+        {
+            var position = new Position(x, y, direction);
+            var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
+            var rover = new Rover(position);
+
+            rover.Move();
+
+            Assert.Equal(rover.Position, expectedPosition);
         }
     }
 }
