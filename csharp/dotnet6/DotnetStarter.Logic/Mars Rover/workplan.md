@@ -22,7 +22,7 @@ Rover
     Position
     void Turn(direction)
     void Move()
-    GetPosition() -> Position
+    GetPosition() -> Position => using public getters and private setters
 
 Position
     int x
