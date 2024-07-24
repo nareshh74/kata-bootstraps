@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MarsRover;
 
@@ -48,6 +49,10 @@ public class Grid
 
     public void MoveRover(Rover rover)
     {
+        if(!this.Rovers.Contains(rover))
+        {
+            return;
+        }
         if (this.IsRoverInValidPositionToMove(rover))
         {
             rover.Move();

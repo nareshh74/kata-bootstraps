@@ -149,6 +149,20 @@ public class Gridtests
 
     public class MoveRover
     {
+        [Fact]
+        public void Should_not_move_a_rover_that_is_not_in_given_grid()
+        {
+            var position = new Position(1, 2, 'N');
+            var rover = new Rover(position);
+            var differentRover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
+
+            grid.MoveRover(differentRover);
+
+            Assert.Equal(grid.GetRoverPosition(rover), position);
+            Assert.Equal(grid.GetRoverPosition(differentRover), position);
+        }
+
         [Theory]
         [InlineData(1, 2, 'N', 2, 2, 'N')]
         [InlineData(1, 2, 'E', 1, 3, 'E')]
