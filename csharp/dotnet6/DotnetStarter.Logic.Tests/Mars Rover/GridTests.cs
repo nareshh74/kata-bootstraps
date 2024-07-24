@@ -151,6 +151,41 @@ public class Gridtests
             }
         }
     }
+
+    public class MoveRover
+    {
+        [Theory]
+        [InlineData(1, 2, 'N', 2, 2, 'N')]
+        [InlineData(1, 2, 'E', 1, 3, 'E')]
+        [InlineData(1, 2, 'S', 0, 2, 'S')]
+        [InlineData(1, 2, 'W', 1, 1, 'W')]
+        public void Should_move_to_expected_position(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
+        {
+            MoveRover.Test_MoveRover(x, y, direction, expectedX, expectedY, expectedDirection);
+        }
+
+        private static void Test_MoveRover(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
+        {
+            var grid = new Grid(5, 5);
+            var position = new Position(x, y, direction);
+            var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
+            var rover = new Rover(position);
+
+            grid.MoveRover(rover);
+
+            Assert.Equal(rover.Position, expectedPosition);
+        }
+
+        [Theory]
+        [InlineData(0, 2, 'S')]
+        [InlineData(1, 0, 'W')]
+        [InlineData(4, 2, 'N')]
+        [InlineData(1, 4, 'E')]
+        public void Should_not_move_when_invalid_position(int x, int y, char direction)
+        {
+            MoveRover.Test_MoveRover(x, y, direction, x, y, direction);
+        }
+    }
 }
 
 public class RoverTests
@@ -164,25 +199,6 @@ public class RoverTests
             var rover = new Rover(position);
 
             Assert.Equal(rover.Position, position);
-        }
-    }
-
-    public class Move
-    {
-        [Theory]
-        [InlineData(1, 2, 'N', 2, 2, 'N')]
-        [InlineData(1, 2, 'E', 1, 3, 'E')]
-        [InlineData(1, 2, 'S', 0, 2, 'S')]
-        [InlineData(1, 2, 'W', 1, 1, 'W')]
-        public void Should_move_to_expected_position(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
-        {
-            var position = new Position(x, y, direction);
-            var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
-            var rover = new Rover(position);
-
-            rover.Move();
-
-            Assert.Equal(rover.Position, expectedPosition);
         }
     }
 

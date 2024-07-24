@@ -50,6 +50,14 @@ public class Grid
 
         return true;
     }
+
+    public void MoveRover(Rover rover)
+    {
+        if (this.IsValid(rover.Position))
+        {
+            rover.Move();
+        }
+    }
 }
 
 public class Rover
@@ -61,7 +69,7 @@ public class Rover
         this.Position = position;
     }
 
-    public void Move()
+    internal void Move()
     {
         var x = this.Position.X;
         var y = this.Position.Y;

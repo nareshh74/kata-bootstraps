@@ -21,7 +21,10 @@ Grid
 Rover
     Position
     void Turn(direction)
-    void Move()
+    void Move() 
+         -> needs to check if the move is valid
+         -> if we do this by calling the containing class grid's IsValid method, then move takes implicit dependency on grid
+         -> instead, we can expose the Move API in Grid and pass the rover as a parameter. this way client code can call grid.Move(rover) and so it's clear that both rover and grid are involved in the move operation
     GetPosition() -> Position => using public getters and private setters
 
 Position
