@@ -291,3 +291,38 @@ public class PositionTests
         }
     }
 }
+
+public class NavigationTests
+{
+    [Fact]
+    // this test fails. looks like i had a diff understanding of how to handle out of bound moves
+    public void Should_return_expected_positions()
+    {
+        var grid = new Grid(5, 5, new List<Rover>
+        {
+            new(new Position(0, 1, 'N')),
+            new(new Position(2, 2, 'E'))
+        });
+
+        NavigationTests.NavigateRover(grid, grid.Rovers[0], "LMLMLMLMM");
+        NavigationTests.NavigateRover(grid, grid.Rovers[1], "MMRMMRMRRM");
+
+        Assert.Equal(grid.GetRoverPosition(grid.Rovers[0]), new Position(0, 2, 'N'));
+        Assert.Equal(grid.GetRoverPosition(grid.Rovers[1]), new Position(4, 0, 'E'));
+    }
+
+    private static void NavigateRover(Grid grid, Rover rover, string commands)
+    {
+        foreach (var command in commands)
+        {
+            if (command == 'M')
+            {
+                grid.MoveRover(rover);
+            }
+            else
+            {
+                grid.TurnRover(rover, command);
+            }
+        }
+    }
+}
