@@ -9,16 +9,11 @@ public class Grid
     public int Height { get; }
     public IReadOnlyList<Rover> Rovers => this._rovers.AsReadOnly();
 
-    public Grid(int width, int height)
+    public Grid(int width, int height, List<Rover> rovers)
     {
         this.Width = width;
         this.Height = height;
-        this._rovers = new List<Rover>();
-    }
-
-    public void AddRover(Rover rover)
-    {
-        this._rovers.Add(rover);
+        this._rovers = rovers;
     }
 
     public bool IsValid(Position position)

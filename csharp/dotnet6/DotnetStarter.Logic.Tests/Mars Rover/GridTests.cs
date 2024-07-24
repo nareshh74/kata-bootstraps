@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using MarsRover;
 using Xunit;
 
 namespace MarsRover;
@@ -11,28 +10,24 @@ public class Gridtests
         [Fact]
         public void Should_have_expected_size()
         {
-            var grid = new Grid(5, 5);
+            var rover = new Rover(new Position(1, 2, 'N'));
+            var grid = new Grid(5, 5, new List<Rover> { rover });
 
             Assert.Equal(5, grid.Width);
             Assert.Equal(5, grid.Height);
         }
-    }
 
-    public class AddRover
-    {
         [Fact]
-        public void Should_add_rover_to_grid()
+        public void Should_add_rovers_to_grid()
         {
-            var grid = new Grid(5, 5);
             var position = new Position(1, 2, 'N');
             var rover = new Rover(position);
 
-            grid.AddRover(rover);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
 
             Assert.Single(grid.Rovers);
             Assert.Contains(rover, grid.Rovers);
         }
-    
     }
 
     public class IsValid
@@ -53,7 +48,8 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var grid = new Grid(x, y);
+            var rover = new Rover(new Position(1, 2, 'N'));
+            var grid = new Grid(x, y, new List<Rover> { rover });
             var position = new Position(posX, posY, direction);
 
             var result = grid.IsValid(position);
@@ -73,7 +69,8 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var grid = new Grid(x, y);
+            var rover = new Rover(new Position(1, 2, 'N'));
+            var grid = new Grid(x, y, new List<Rover> { rover });
             var position = new Position(posX, posY, direction);
 
             var result = grid.IsValid(position);
@@ -96,7 +93,8 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var grid = new Grid(x, y);
+            var rover = new Rover(new Position(1, 2, 'N'));
+            var grid = new Grid(x, y, new List<Rover> { rover });
             for(int i = 1; i < y - 1; i++)
             {
                 var position = new Position(edgeXIndex, i, direction);
@@ -120,7 +118,8 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var grid = new Grid(x, y);
+            var rover = new Rover(new Position(1, 2, 'N'));
+            var grid = new Grid(x, y, new List<Rover> { rover });
             for (int i = 1; i < x - 1; i++)
             {
                 var position = new Position(i, edgeYIndex, direction);
@@ -135,7 +134,8 @@ public class Gridtests
             var directionList = new List<char> { 'N', 'E', 'S', 'W' };
             const int x = 5;
             const int y = 5;
-            var grid = new Grid(x, y);
+            var rover = new Rover(new Position(1, 2, 'N'));
+            var grid = new Grid(x, y, new List<Rover> { rover });
 
             for(int i = 1; i < x - 1; i++)
             {
@@ -166,10 +166,10 @@ public class Gridtests
 
         private static void Test_MoveRover(int x, int y, char direction, int expectedX, int expectedY, char expectedDirection)
         {
-            var grid = new Grid(5, 5);
             var position = new Position(x, y, direction);
             var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
             var rover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
 
             grid.MoveRover(rover);
 
