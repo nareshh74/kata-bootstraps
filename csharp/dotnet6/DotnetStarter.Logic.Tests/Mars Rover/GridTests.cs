@@ -168,7 +168,7 @@ public class Gridtests
 
             grid.MoveRover(rover);
 
-            Assert.Equal(rover.Position, expectedPosition);
+            Assert.Equal(grid.GetRoverPosition(rover), expectedPosition);
         }
 
         [Theory]
@@ -179,6 +179,21 @@ public class Gridtests
         public void Should_not_move_when_invalid_position(int x, int y, char direction)
         {
             MoveRover.Test_MoveRover(x, y, direction, x, y, direction);
+        }
+    }
+
+    public class GetRoverPosition
+    {
+        [Fact]
+        public void Should_return_expected_position()
+        {
+            var position = new Position(1, 2, 'N');
+            var rover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
+
+            var result = grid.GetRoverPosition(rover);
+
+            Assert.Equal(result, position);
         }
     }
 }
@@ -192,8 +207,9 @@ public class RoverTests
         {
             var position = new Position(1, 2, 'N');
             var rover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
 
-            Assert.Equal(rover.Position, position);
+            Assert.Equal(grid.GetRoverPosition(rover), position);
         }
     }
 
@@ -209,10 +225,11 @@ public class RoverTests
             var position = new Position(x, y, direction);
             var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
             var rover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
 
             rover.Turn('L');
 
-            Assert.Equal(rover.Position, expectedPosition);
+            Assert.Equal(grid.GetRoverPosition(rover), expectedPosition);
         }
 
         [Theory]
@@ -225,10 +242,11 @@ public class RoverTests
             var position = new Position(x, y, direction);
             var expectedPosition = new Position(expectedX, expectedY, expectedDirection);
             var rover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
 
             rover.Turn('R');
 
-            Assert.Equal(rover.Position, expectedPosition);
+            Assert.Equal(grid.GetRoverPosition(rover), expectedPosition);
         }
     }
 }

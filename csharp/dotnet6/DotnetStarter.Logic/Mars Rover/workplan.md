@@ -18,6 +18,7 @@ Grid
     IsRoverInValidPositionToMove(rover) -> bool
     AddRover(Rover) -> grid w/o rovers means nothing in this context. so move this to ctor
     MoverRover(rover)
+    GetRoverPosition(rover) -> Position
 
 Rover
     Position
@@ -42,4 +43,5 @@ tests
  - move shud move 1 point
  - out of bounds check
  - get position shud return correct position
+ - shudnt move a rover that is not in the grid
  - sequence of steps

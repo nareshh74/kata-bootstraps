@@ -53,11 +53,16 @@ public class Grid
             rover.Move();
         }
     }
+
+    public Position GetRoverPosition(Rover rover)
+    {
+        return rover.Position;
+    }
 }
 
 public class Rover
 {
-    public Position Position { get; private set; }
+    internal Position Position { get; private set; }
 
     public Rover(Position position)
     {
