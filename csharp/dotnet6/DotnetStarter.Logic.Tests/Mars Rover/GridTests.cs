@@ -30,7 +30,7 @@ public class Gridtests
         }
     }
 
-    public class IsValid
+    public class IsRoverInValidPositionToMove
     {
         [Theory]
         [InlineData(5, 5, 0, 0, 'N', true)]
@@ -48,11 +48,10 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var rover = new Rover(new Position(1, 2, 'N'));
+            var rover = new Rover(new Position(posX, posY, direction));
             var grid = new Grid(x, y, new List<Rover> { rover });
-            var position = new Position(posX, posY, direction);
 
-            var result = grid.IsValid(position);
+            var result = grid.IsRoverInValidPositionToMove(rover);
 
             Assert.Equal(result, expected);
         }
@@ -69,11 +68,10 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var rover = new Rover(new Position(1, 2, 'N'));
+            var rover = new Rover(new Position(posX, posY, direction));
             var grid = new Grid(x, y, new List<Rover> { rover });
-            var position = new Position(posX, posY, direction);
 
-            var result = grid.IsValid(position);
+            var result = grid.IsRoverInValidPositionToMove(rover);
 
             Assert.Equal(result, expected);
         }
@@ -93,12 +91,11 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var rover = new Rover(new Position(1, 2, 'N'));
-            var grid = new Grid(x, y, new List<Rover> { rover });
             for(int i = 1; i < y - 1; i++)
             {
-                var position = new Position(edgeXIndex, i, direction);
-                var result = grid.IsValid(position);
+                var rover = new Rover(new Position(edgeXIndex, i, direction));
+                var grid = new Grid(x, y, new List<Rover> { rover });
+                var result = grid.IsRoverInValidPositionToMove(rover);
                 Assert.Equal(result, expected);
             }
         }
@@ -118,12 +115,11 @@ public class Gridtests
             char direction,
             bool expected)
         {
-            var rover = new Rover(new Position(1, 2, 'N'));
-            var grid = new Grid(x, y, new List<Rover> { rover });
             for (int i = 1; i < x - 1; i++)
             {
-                var position = new Position(i, edgeYIndex, direction);
-                var result = grid.IsValid(position);
+                var rover = new Rover(new Position(i, edgeYIndex, direction));
+                var grid = new Grid(x, y, new List<Rover> { rover });
+                var result = grid.IsRoverInValidPositionToMove(rover);
                 Assert.Equal(result, expected);
             }
         }
@@ -134,8 +130,6 @@ public class Gridtests
             var directionList = new List<char> { 'N', 'E', 'S', 'W' };
             const int x = 5;
             const int y = 5;
-            var rover = new Rover(new Position(1, 2, 'N'));
-            var grid = new Grid(x, y, new List<Rover> { rover });
 
             for(int i = 1; i < x - 1; i++)
             {
@@ -143,8 +137,9 @@ public class Gridtests
                 {
                     foreach (var direction in directionList)
                     {
-                        var position = new Position(i, j, direction);
-                        var result = grid.IsValid(position);
+                        var rover = new Rover(new Position(i, j, direction));
+                        var grid = new Grid(x, y, new List<Rover> { rover });;
+                        var result = grid.IsRoverInValidPositionToMove(rover);
                         Assert.True(result);
                     }
                 }

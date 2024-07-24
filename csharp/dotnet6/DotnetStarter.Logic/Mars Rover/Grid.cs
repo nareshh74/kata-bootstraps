@@ -16,10 +16,10 @@ public class Grid
         this._rovers = rovers;
     }
 
-    public bool IsValid(Position position)
+    public bool IsRoverInValidPositionToMove(Rover rover)
     {
-        int x = position.X, y = position.Y;
-        var direction = position.Direction;
+        int x = rover.Position.X, y = rover.Position.Y;
+        var direction = rover.Position.Direction;
 
         if (x < 0 || y < 0 || x >= this.Width || y >= this.Height)
         {
@@ -48,7 +48,7 @@ public class Grid
 
     public void MoveRover(Rover rover)
     {
-        if (this.IsValid(rover.Position))
+        if (this.IsRoverInValidPositionToMove(rover))
         {
             rover.Move();
         }

@@ -15,7 +15,7 @@ Grid
     int length
     int breadth
     list<Rover>
-    IsValid(Position) -> bool
+    IsRoverInValidPositionToMove(rover) -> bool
     AddRover(Rover) -> grid w/o rovers means nothing in this context. so move this to ctor
     MoverRover(rover)
 
