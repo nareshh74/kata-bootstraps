@@ -58,6 +58,11 @@ public class Grid
     {
         return rover.Position;
     }
+
+    public void TurnRover(Rover rover, char direction)
+    {
+        rover.Turn(direction);
+    }
 }
 
 public class Rover
@@ -85,7 +90,7 @@ public class Rover
         };
     }
 
-    public void Turn(char direction)
+    internal void Turn(char direction)
     {
         var x = this.Position.X;
         var y = this.Position.Y;

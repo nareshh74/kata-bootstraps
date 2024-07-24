@@ -19,6 +19,7 @@ Grid
     AddRover(Rover) -> grid w/o rovers means nothing in this context. so move this to ctor
     MoverRover(rover)
     GetRoverPosition(rover) -> Position
+    TurnRover(rover, direction) -> conceptually, grid contains rovers so, exposing all public APIs through grid makes sense. this way, client doesnt have to know about rover's behaviour.
 
 Rover
     Position

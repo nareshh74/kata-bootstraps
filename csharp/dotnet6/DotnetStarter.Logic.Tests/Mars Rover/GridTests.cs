@@ -196,24 +196,8 @@ public class Gridtests
             Assert.Equal(result, position);
         }
     }
-}
 
-public class RoverTests
-{
-    public class Ctor
-    {
-        [Fact]
-        public void Should_have_expected_position()
-        {
-            var position = new Position(1, 2, 'N');
-            var rover = new Rover(position);
-            var grid = new Grid(5, 5, new List<Rover> { rover });
-
-            Assert.Equal(grid.GetRoverPosition(rover), position);
-        }
-    }
-
-    public class Turn
+    public class TurnRover
     {
         [Theory]
         [InlineData(1, 2, 'N', 1, 2, 'W')]
@@ -227,7 +211,7 @@ public class RoverTests
             var rover = new Rover(position);
             var grid = new Grid(5, 5, new List<Rover> { rover });
 
-            rover.Turn('L');
+            grid.TurnRover(rover, 'L');
 
             Assert.Equal(grid.GetRoverPosition(rover), expectedPosition);
         }
@@ -244,9 +228,25 @@ public class RoverTests
             var rover = new Rover(position);
             var grid = new Grid(5, 5, new List<Rover> { rover });
 
-            rover.Turn('R');
+            grid.TurnRover(rover, 'R');
 
             Assert.Equal(grid.GetRoverPosition(rover), expectedPosition);
+        }
+    }
+}
+
+public class RoverTests
+{
+    public class Ctor
+    {
+        [Fact]
+        public void Should_have_expected_position()
+        {
+            var position = new Position(1, 2, 'N');
+            var rover = new Rover(position);
+            var grid = new Grid(5, 5, new List<Rover> { rover });
+
+            Assert.Equal(grid.GetRoverPosition(rover), position);
         }
     }
 }
