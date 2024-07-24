@@ -28,6 +28,17 @@ public class Gridtests
             Assert.Single(grid.Rovers);
             Assert.Contains(rover, grid.Rovers);
         }
+
+        [Fact]
+        public void Should_not_add_rover_that_is_out_of_bounds()
+        {
+            var position = new Position(6, 6, 'N');
+            var rover = new Rover(position);
+
+            var grid = new Grid(5, 5, new List<Rover> { rover });
+
+            Assert.Empty(grid.Rovers);
+        }
     }
 
     public class IsRoverInValidPositionToMove

@@ -14,7 +14,18 @@ public class Grid
     {
         this.Width = width;
         this.Height = height;
-        this._rovers = rovers;
+        this._rovers = new List<Rover>();
+
+        foreach (var rover in rovers)
+        {
+            if(rover.Position.X >= 0
+                && rover.Position.X < width
+                && rover.Position.Y >= 0
+                && rover.Position.Y < height)
+            {
+                this._rovers.Add(rover);
+            }
+        }
     }
 
     public bool IsRoverInValidPositionToMove(Rover rover)
