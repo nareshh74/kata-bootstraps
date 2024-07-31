@@ -18,7 +18,7 @@ public class AtmShould
 1 bill of 20.
 1 bill of 10.
 2 coins of 2.")]
-        public void display_expected_result(int withdrawalAmount, string expected)
+        public void Display_expected_result(int withdrawalAmount, string expected)
         {
             using StringWriter sw = new();
             Console.SetOut(sw);
