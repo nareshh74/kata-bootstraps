@@ -28,5 +28,17 @@ public class AtmShould
             var actual = sw.ToString().Trim();
             Assert.True(expected.Equals(actual), $"expected - {expected} | actual - {actual}");
         }
+
+        [Fact]
+        public void Handle_not_enough_money()
+        {
+            using StringWriter sw = new();
+            Console.SetOut(sw);
+
+            AtmClient.WithDraw(10000);
+
+            var actual = sw.ToString().Trim();
+            Assert.True("Not enough money in ATM.".Equals(actual), $"expected - Not enough money in ATM. | actual - {actual}");
+        }
     }
 }

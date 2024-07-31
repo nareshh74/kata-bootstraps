@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace DotnetStarter.Logic.ATM.Domain
 {
@@ -11,8 +12,8 @@ namespace DotnetStarter.Logic.ATM.Domain
 
     public class Atm : IAtm
     {
-        private readonly MoneyCollection _moneyCollection;
-        private readonly Display _display;
+        public MoneyCollection MoneyCollection { get; }
+        public Display Display { get; }
 
         private static readonly MoneyCollection DefaultMoneyStock = new(
             new Dictionary<Money, int>
@@ -30,24 +31,24 @@ namespace DotnetStarter.Logic.ATM.Domain
             );
         private static readonly Display DefaultDisplay = new();
 
-        public static Atm Create(MoneyCollection moneyCollection = null, Display display = null)
+        public static IAtm Create(MoneyCollection moneyCollection = null, Display display = null)
         {
             moneyCollection ??= Atm.DefaultMoneyStock;
             display ??= Atm.DefaultDisplay;
-            return new Atm(moneyCollection, display);
+            return new AtmV2(new Atm(moneyCollection, display));
         }
 
         private Atm(MoneyCollection moneyCollection, Display display)
         {
-            this._moneyCollection = moneyCollection;
-            this._display = display;
+            this.MoneyCollection = moneyCollection;
+            this.Display = display;
         }
 
         private MoneyCollection DetectMoney(int amount)
         {
             // convert amount to money
             var moneyCollection = new Dictionary<Money, int>();
-            var moneyStock = this._moneyCollection.MoneyCountMap;
+            var moneyStock = this.MoneyCollection.MoneyCountMap;
             var moneyStockKeys = moneyStock.Keys.OrderByDescending(x => x.Value).ToList();
             var remainingAmount = amount;
             foreach (var money in moneyStockKeys)
@@ -67,7 +68,28 @@ namespace DotnetStarter.Logic.ATM.Domain
         public void WithDraw(int amount)
         {
             var moneyCollection = this.DetectMoney(amount);
-            this._display.Print(moneyCollection);
+            this.Display.Print(moneyCollection.ToString());
+        }
+    }
+
+    public class AtmV2 : IAtm
+    {
+        private readonly Atm _atm;
+
+        public AtmV2(Atm atm)
+        {
+            this._atm = atm;
+        }
+
+        public void WithDraw(int amount)
+        {
+            if (this._atm.MoneyCollection.Value < amount)
+            {
+                this._atm.Display.Print("Not enough money in ATM.");
+                return;
+            }
+
+            this._atm.WithDraw(amount);
         }
     }
 
@@ -88,6 +110,18 @@ namespace DotnetStarter.Logic.ATM.Domain
             {
                 return this._moneyCountMap.Select(x => x.Value).Sum();
             }
+        }
+
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            foreach (var money in this.MoneyCountMap.Keys)
+            {
+                var count = this.MoneyCountMap[money];
+                var moneyType = count > 1 ? money.Type + "s" : money.Type.ToString();
+                stringBuilder.AppendLine($"{count} {moneyType.ToLower()} of {money.Value}.");
+            }
+            return stringBuilder.ToString();
         }
     }
 
@@ -121,14 +155,9 @@ namespace DotnetStarter.Logic.ATM.Domain
 
     public class Display
     {
-        public void Print(MoneyCollection moneyCollection)
+        public void Print(string message)
         {
-            foreach (var money in moneyCollection.MoneyCountMap.Keys)
-            {
-                var count = moneyCollection.MoneyCountMap[money];
-                var moneyType = count > 1 ? money.Type + "s" : money.Type.ToString();
-                Console.WriteLine($"{count} {moneyType.ToLower()} of {money.Value}.");
-            }
+            Console.WriteLine(message);
         }
     }
 }
