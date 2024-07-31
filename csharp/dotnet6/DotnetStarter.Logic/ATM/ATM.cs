@@ -14,7 +14,20 @@ namespace DotnetStarter.Logic.ATM.Domain
         private readonly MoneyCollection _moneyCollection;
         private readonly Display _display;
 
-        private static readonly MoneyCollection DefaultMoneyStock = new(new Dictionary<Money, int> { { new Money { Value = 100, Type = MoneyType.Bill }, 10 } });
+        private static readonly MoneyCollection DefaultMoneyStock = new(
+            new Dictionary<Money, int>
+            {
+                { Money.FiveHundred, 2 },
+                { Money.TwoHundred, 3 },
+                { Money.Hundred, 5 },
+                { Money.Fifty, 12 },
+                { Money.Twenty, 20 },
+                { Money.Ten, 50 },
+                { Money.Five, 100 },
+                { Money.Two, 250 },
+                { Money.One, 500 }
+            }
+            );
         private static readonly Display DefaultDisplay = new();
 
         public static Atm Create(MoneyCollection moneyCollection = null, Display display = null)
@@ -80,9 +93,24 @@ namespace DotnetStarter.Logic.ATM.Domain
 
     public record Money
     {
-        public int Value { get; set; }
-        public MoneyType Type { get; set; }
+        public static Money FiveHundred => new(500, MoneyType.Bill);
+        public static Money TwoHundred => new(200, MoneyType.Bill);
+        public static Money Hundred => new(100, MoneyType.Bill);
+        public static Money Fifty => new(50, MoneyType.Bill);
+        public static Money Twenty => new(20, MoneyType.Bill);
+        public static Money Ten => new(10, MoneyType.Bill);
+        public static Money Five => new(5, MoneyType.Bill);
+        public static Money Two => new(2, MoneyType.Coin);
+        public static Money One => new(1, MoneyType.Coin);
 
+        public int Value { get; }
+        public MoneyType Type { get; }
+
+        private Money(int value, MoneyType moneyType)
+        {
+            this.Value = value;
+            this.Type = moneyType;
+        }
     }
 
     public enum MoneyType
