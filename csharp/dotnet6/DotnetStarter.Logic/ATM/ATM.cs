@@ -12,8 +12,8 @@ namespace DotnetStarter.Logic.ATM.Domain
 
     public class Atm : IAtm
     {
-        public MoneyCollection MoneyCollection { get; }
-        public Display Display { get; }
+        private readonly MoneyCollection _moneyCollection;
+        private readonly Display _display;
 
         private static readonly MoneyCollection DefaultMoneyStock = new(
             new Dictionary<Money, int>
@@ -40,15 +40,15 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         private Atm(MoneyCollection moneyCollection, Display display)
         {
-            this.MoneyCollection = moneyCollection;
-            this.Display = display;
+            this._moneyCollection = moneyCollection;
+            this._display = display;
         }
 
         private MoneyCollection DetectMoney(int amount)
         {
             // convert amount to money
             var moneyCollection = new Dictionary<Money, int>();
-            var moneyStock = this.MoneyCollection.MoneyCountMap;
+            var moneyStock = this._moneyCollection.MoneyCountMap;
             var moneyStockKeys = moneyStock.Keys.OrderByDescending(x => x.Value).ToList();
             var remainingAmount = amount;
             foreach (var money in moneyStockKeys)
@@ -68,28 +68,28 @@ namespace DotnetStarter.Logic.ATM.Domain
         public void WithDraw(int amount)
         {
             var moneyCollection = this.DetectMoney(amount);
-            this.Display.Print(moneyCollection.ToString());
-        }
-    }
-
-    public class AtmV2 : IAtm
-    {
-        private readonly Atm _atm;
-
-        public AtmV2(Atm atm)
-        {
-            this._atm = atm;
+            this._display.Print(moneyCollection.ToString());
         }
 
-        public void WithDraw(int amount)
+        public class AtmV2 : IAtm
         {
-            if (this._atm.MoneyCollection.Value < amount)
+            private readonly Atm _atm;
+
+            public AtmV2(Atm atm)
             {
-                this._atm.Display.Print("Not enough money in ATM.");
-                return;
+                this._atm = atm;
             }
 
-            this._atm.WithDraw(amount);
+            public void WithDraw(int amount)
+            {
+                if (this._atm._moneyCollection.Value < amount)
+                {
+                    this._atm._display.Print("Not enough money in ATM.");
+                    return;
+                }
+
+                this._atm.WithDraw(amount);
+            }
         }
     }
 
