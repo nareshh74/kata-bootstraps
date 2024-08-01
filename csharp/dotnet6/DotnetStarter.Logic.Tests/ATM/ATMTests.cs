@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using DotnetStarter.Logic.ATM;
+using DotnetStarter.Logic.ATM.Domain;
 using Xunit;
 
 namespace DotnetStarter.Logic.Tests.ATM;
@@ -39,6 +40,17 @@ public class AtmShould
 
             var actual = sw.ToString().Trim();
             Assert.True("Not enough money in ATM.".Equals(actual), $"expected - Not enough money in ATM. | actual - {actual}");
+        }
+    }
+
+    public class CreateShould
+    {
+        [Fact]
+        public void Create_atm()
+        {
+            var atm = Atm.Create();
+
+            Assert.NotNull(atm);
         }
     }
 }
