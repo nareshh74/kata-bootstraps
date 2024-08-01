@@ -108,7 +108,7 @@ namespace DotnetStarter.Logic.ATM.Domain
         {
             get
             {
-                return this._moneyCountMap.Select(x => x.Value).Sum();
+                return this._moneyCountMap.Select(x => x.Value * x.Key.Value).Sum();
             }
         }
 
