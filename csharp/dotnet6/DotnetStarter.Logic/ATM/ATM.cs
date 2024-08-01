@@ -46,7 +46,6 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         private MoneyCollection DetectMoney(int amount)
         {
-            // convert amount to money
             var moneyCollection = new Dictionary<Money, int>();
             var moneyStock = this._moneyCollection.MoneyCountMap;
             var moneyStockKeys = moneyStock.Keys.OrderByDescending(x => x.Value).ToList();
