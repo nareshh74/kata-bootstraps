@@ -71,7 +71,7 @@ namespace DotnetStarter.Logic.ATM.Domain
             this._display.Print(moneyCollection.ToString());
         }
 
-        public class AtmV2 : IAtm
+        private class AtmV2 : IAtm
         {
             private readonly Atm _atm;
 
