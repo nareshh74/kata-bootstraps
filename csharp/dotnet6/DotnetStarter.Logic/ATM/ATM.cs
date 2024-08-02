@@ -33,7 +33,7 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         public static IAtm Create(MoneyCollection moneyCollection = null, Display display = null)
         {
-            moneyCollection ??= Atm.DefaultMoneyStock;
+            moneyCollection ??= new MoneyCollection(Atm.DefaultMoneyStock.MoneyCountMap);
             display ??= Atm.DefaultDisplay;
             return new AtmV2(new Atm(moneyCollection, display));
         }
@@ -98,9 +98,10 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         public IReadOnlyDictionary<Money, int> MoneyCountMap => this._moneyCountMap;
 
-        public MoneyCollection(Dictionary<Money, int> moneyCollection)
+        public MoneyCollection(IEnumerable<KeyValuePair<Money, int>> moneyCollection)
         {
-            this._moneyCountMap = moneyCollection;
+            var moneyCollectionCopy = moneyCollection.ToDictionary(money => money.Key, money => money.Value);
+            this._moneyCountMap = moneyCollectionCopy;
         }
 
         public int Value
