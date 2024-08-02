@@ -46,22 +46,22 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         private MoneyCollection DetectMoney(int amount)
         {
-            var moneyCollection = new Dictionary<Money, int>();
-            var moneyStock = this._moneyCollection.MoneyCountMap;
-            var moneyStockKeys = moneyStock.Keys.OrderByDescending(x => x.Value).ToList();
+            var moneyToBeWithdrawn = new Dictionary<Money, int>();
+            var moneyInAtm = this._moneyCollection.MoneyCountMap;
+            var denominations = moneyInAtm.Keys.OrderByDescending(x => x.Value).ToList();
             var remainingAmount = amount;
-            foreach (var money in moneyStockKeys)
+            foreach (var denomination in denominations)
             {
-                var moneyCount = remainingAmount / money.Value;
-                if (moneyCount > 0)
+                var neededDenominationCount = remainingAmount / denomination.Value;
+                if (neededDenominationCount > 0)
                 {
-                    var availableMoneyCount = moneyStock[money];
-                    var actualMoneyCount = moneyCount > availableMoneyCount ? availableMoneyCount : moneyCount;
-                    moneyCollection.Add(money, actualMoneyCount);
-                    remainingAmount -= actualMoneyCount * money.Value;
+                    var availableDenominationCount = moneyInAtm[denomination];
+                    var denominationCountToBeDetected = neededDenominationCount > availableDenominationCount ? availableDenominationCount : neededDenominationCount;
+                    moneyToBeWithdrawn.Add(denomination, denominationCountToBeDetected);
+                    remainingAmount -= denominationCountToBeDetected * denomination.Value;
                 }
             }
-            return new MoneyCollection(moneyCollection);
+            return new MoneyCollection(moneyToBeWithdrawn);
         }
 
         public void WithDraw(int amount)
