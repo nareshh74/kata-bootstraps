@@ -24,7 +24,7 @@ public class AtmShould
             using StringWriter sw = new();
             Console.SetOut(sw);
 
-            var atm = Atm.Create();
+            var atm = Atm.Create(Atm.DefaultMoneyStock, Atm.DefaultDisplay);
             atm.WithDraw(withdrawalAmount);
 
             var actual = sw.ToString().Trim();
@@ -37,7 +37,7 @@ public class AtmShould
             using StringWriter sw = new();
             Console.SetOut(sw);
 
-            var atm = Atm.Create();
+            var atm = Atm.Create(Atm.DefaultMoneyStock, Atm.DefaultDisplay);
             atm.WithDraw(10000);
 
             var actual = sw.ToString().Trim();
@@ -50,7 +50,7 @@ public class AtmShould
         [Fact]
         public void Create_atm()
         {
-            var atm = Atm.Create();
+            var atm = Atm.Create(Atm.DefaultMoneyStock, Atm.DefaultDisplay);
 
             Assert.NotNull(atm);
         }
