@@ -19,6 +19,11 @@ public class AtmShould
 1 bill of 20.
 1 bill of 10.
 2 coins of 2.")]
+        [InlineData(1725, @"2 bills of 500.
+3 bills of 200.
+1 bill of 100.
+1 bill of 20.
+1 bill of 5.")]
         public void Display_expected_result(int withdrawalAmount, string expected)
         {
             using StringWriter sw = new();
@@ -42,6 +47,31 @@ public class AtmShould
 
             var actual = sw.ToString().Trim();
             Assert.True("Not enough money in ATM.".Equals(actual), $"expected - Not enough money in ATM. | actual - {actual}");
+        }
+
+        [Fact]
+        public void Work_as_expected_when_withdrawn_in_sequence()
+        {
+            using StringWriter sw = new();
+            Console.SetOut(sw);
+
+            var atm = Atm.Create(Atm.DefaultMoneyStock, Atm.DefaultDisplay);
+            atm.WithDraw(1725);
+            atm.WithDraw(1825);
+
+            var actual = sw.ToString().Trim();
+            var expected = @"2 bills of 500.
+3 bills of 200.
+1 bill of 100.
+1 bill of 20.
+1 bill of 5.
+
+4 bills of 100.
+12 bills of 50.
+19 bills of 20.
+44 bills of 10.
+1 bill of 5.";
+            Assert.True(expected.Equals(actual), $"expected - {expected}. | actual - {actual}");
         }
     }
 

@@ -34,7 +34,7 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         public static IAtm Create(MoneyCollection moneyCollection, Display display)
         {
-            IMoneyDetectionBehavior moneyDetectionBehavior = new MoneyDetectionBehaviorV1();
+            IMoneyDetectionBehavior moneyDetectionBehavior = new MoneyDetectionBehaviorV2();
             return new AtmV2(new Atm(moneyCollection, display, moneyDetectionBehavior));
         }
 
@@ -112,6 +112,36 @@ namespace DotnetStarter.Logic.ATM.Domain
                 return new MoneyCollection(moneyToBeWithdrawn);
             }
         }
+
+        private class MoneyDetectionBehaviorV2 : IMoneyDetectionBehavior
+        {
+            public MoneyCollection DetectMoney(int amount, MoneyCollection moneyCollection)
+            {
+                var moneyToBeWithdrawn = new Dictionary<Money, int>();
+                var moneyInAtm = moneyCollection.MoneyCountMap;
+                var denominations = moneyInAtm.Keys.OrderByDescending(x => x.Value).ToList();
+                var remainingAmount = amount;
+                foreach (var denomination in denominations)
+                {
+                    var availableDenominationCount = moneyInAtm[denomination];
+                    if (availableDenominationCount == 0)
+                    {
+                        continue;
+                    }
+                    var neededDenominationCount = remainingAmount / denomination.Value;
+                    if (neededDenominationCount > 0)
+                    {
+                        var denominationCountToBeDetected = neededDenominationCount > availableDenominationCount ? availableDenominationCount : neededDenominationCount;
+                        if (moneyCollection.TryDetectMoney(denomination, denominationCountToBeDetected))
+                        {
+                            moneyToBeWithdrawn.Add(denomination, denominationCountToBeDetected);
+                            remainingAmount -= denominationCountToBeDetected * denomination.Value;
+                        }
+                    }
+                }
+                return new MoneyCollection(moneyToBeWithdrawn);
+            }
+        }
     }
 
     public record MoneyCollection
@@ -145,6 +175,16 @@ namespace DotnetStarter.Logic.ATM.Domain
                 stringBuilder.AppendLine($"{count} {moneyType.ToLower()} of {money.Value}.");
             }
             return stringBuilder.ToString();
+        }
+
+        public bool TryDetectMoney(Money money, int count)
+        {
+            if (this._moneyCountMap[money] < count)
+            {
+                return false;
+            }
+            this._moneyCountMap[money] -= count;
+            return true;
         }
     }
 
