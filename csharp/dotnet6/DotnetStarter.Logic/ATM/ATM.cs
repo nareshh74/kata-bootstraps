@@ -14,6 +14,7 @@ namespace DotnetStarter.Logic.ATM.Domain
     {
         private readonly MoneyCollection _moneyCollection;
         private readonly Display _display;
+        private readonly IMoneyDetectionBehavior _moneyDetectionBehavior;
 
         public static readonly MoneyCollection DefaultMoneyStock = new(
             new Dictionary<Money, int>
@@ -35,33 +36,23 @@ namespace DotnetStarter.Logic.ATM.Domain
         {
             moneyCollection ??= new MoneyCollection(Atm.DefaultMoneyStock.MoneyCountMap);
             display ??= Atm.DefaultDisplay;
-            return new AtmV2(new Atm(moneyCollection, display));
+            IMoneyDetectionBehavior moneyDetectionBehavior = new MoneyDetectionBehaviorV1();
+            return new AtmV2(new Atm(moneyCollection, display, moneyDetectionBehavior));
         }
 
-        private Atm(MoneyCollection moneyCollection, Display display)
+        private Atm(
+            MoneyCollection moneyCollection,
+            Display display,
+            IMoneyDetectionBehavior moneyDetectionBehavior)
         {
             this._moneyCollection = moneyCollection;
             this._display = display;
+            this._moneyDetectionBehavior = moneyDetectionBehavior;
         }
 
         private MoneyCollection DetectMoney(int amount)
         {
-            var moneyToBeWithdrawn = new Dictionary<Money, int>();
-            var moneyInAtm = this._moneyCollection.MoneyCountMap;
-            var denominations = moneyInAtm.Keys.OrderByDescending(x => x.Value).ToList();
-            var remainingAmount = amount;
-            foreach (var denomination in denominations)
-            {
-                var neededDenominationCount = remainingAmount / denomination.Value;
-                if (neededDenominationCount > 0)
-                {
-                    var availableDenominationCount = moneyInAtm[denomination];
-                    var denominationCountToBeDetected = neededDenominationCount > availableDenominationCount ? availableDenominationCount : neededDenominationCount;
-                    moneyToBeWithdrawn.Add(denomination, denominationCountToBeDetected);
-                    remainingAmount -= denominationCountToBeDetected * denomination.Value;
-                }
-            }
-            return new MoneyCollection(moneyToBeWithdrawn);
+            return this._moneyDetectionBehavior.DetectMoney(amount, this._moneyCollection);
         }
 
         public void WithDraw(int amount)
@@ -88,6 +79,38 @@ namespace DotnetStarter.Logic.ATM.Domain
                 }
 
                 this._atm.WithDraw(amount);
+            }
+        }
+
+        private interface IMoneyDetectionBehavior
+        {
+            MoneyCollection DetectMoney(int amount, MoneyCollection moneyCollection);
+        }
+
+        /// <summary>
+        /// initial impl.
+        /// Doesn't actually detect money from the ATM. - BUG!!
+        /// </summary>
+        private class MoneyDetectionBehaviorV1 : IMoneyDetectionBehavior
+        {
+            public MoneyCollection DetectMoney(int amount, MoneyCollection moneyCollection)
+            {
+                var moneyToBeWithdrawn = new Dictionary<Money, int>();
+                var moneyInAtm = moneyCollection.MoneyCountMap;
+                var denominations = moneyInAtm.Keys.OrderByDescending(x => x.Value).ToList();
+                var remainingAmount = amount;
+                foreach (var denomination in denominations)
+                {
+                    var neededDenominationCount = remainingAmount / denomination.Value;
+                    if (neededDenominationCount > 0)
+                    {
+                        var availableDenominationCount = moneyInAtm[denomination];
+                        var denominationCountToBeDetected = neededDenominationCount > availableDenominationCount ? availableDenominationCount : neededDenominationCount;
+                        moneyToBeWithdrawn.Add(denomination, denominationCountToBeDetected);
+                        remainingAmount -= denominationCountToBeDetected * denomination.Value;
+                    }
+                }
+                return new MoneyCollection(moneyToBeWithdrawn);
             }
         }
     }
