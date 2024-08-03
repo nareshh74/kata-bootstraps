@@ -34,8 +34,6 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         public static IAtm Create(MoneyCollection moneyCollection, Display display)
         {
-            moneyCollection ??= new MoneyCollection(Atm.DefaultMoneyStock.MoneyCountMap);
-            display ??= Atm.DefaultDisplay;
             IMoneyDetectionBehavior moneyDetectionBehavior = new MoneyDetectionBehaviorV1();
             return new AtmV2(new Atm(moneyCollection, display, moneyDetectionBehavior));
         }
@@ -45,7 +43,8 @@ namespace DotnetStarter.Logic.ATM.Domain
             Display display,
             IMoneyDetectionBehavior moneyDetectionBehavior)
         {
-            this._moneyCollection = moneyCollection;
+            // don't directly assign stateful properties to parameters passed by reference
+            this._moneyCollection = new MoneyCollection(moneyCollection.MoneyCountMap);
             this._display = display;
             this._moneyDetectionBehavior = moneyDetectionBehavior;
         }
@@ -123,6 +122,7 @@ namespace DotnetStarter.Logic.ATM.Domain
 
         public MoneyCollection(IEnumerable<KeyValuePair<Money, int>> moneyCollection)
         {
+            // don't directly assign parameters passed by reference in a Value Object
             var moneyCollectionCopy = moneyCollection.ToDictionary(money => money.Key, money => money.Value);
             this._moneyCountMap = moneyCollectionCopy;
         }
