@@ -15,7 +15,7 @@ namespace DotnetStarter.Logic.ATM.Domain
         private readonly MoneyCollection _moneyCollection;
         private readonly Display _display;
 
-        private static readonly MoneyCollection DefaultMoneyStock = new(
+        public static readonly MoneyCollection DefaultMoneyStock = new(
             new Dictionary<Money, int>
             {
                 { Money.FiveHundred, 2 },
@@ -29,9 +29,9 @@ namespace DotnetStarter.Logic.ATM.Domain
                 { Money.One, 500 }
             }
             );
-        private static readonly Display DefaultDisplay = new();
+        public static readonly Display DefaultDisplay = new();
 
-        public static IAtm Create(MoneyCollection moneyCollection = null, Display display = null)
+        public static IAtm Create(MoneyCollection moneyCollection, Display display)
         {
             moneyCollection ??= new MoneyCollection(Atm.DefaultMoneyStock.MoneyCountMap);
             display ??= Atm.DefaultDisplay;
