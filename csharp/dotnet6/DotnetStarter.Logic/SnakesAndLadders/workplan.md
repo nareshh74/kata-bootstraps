@@ -23,44 +23,60 @@ behavior
 
 design
 
+GameBuilder
+ - public Build() => Game
+ - public AddBoardObject(BoardObject)
+     - board object is snake or ladder
+ - public AddPlayer(Player)
+
 Game
  - public Game(Board, Players[])
- - Board
- - Player[]
+ - Board board
+ - Players
  - Dice
- - current turn Player
- - NextTurn()
- - public HasEnded() -> bool
- - MoveCurrentPlayer(int) 
+ - public GiveTurnToNextPlayer()
+    - delegates to Players.GiveTurnToNextPlayer()
+ - public bool HasEnded()
+ - private void MoveCurrentPlayer(int count)
     - reactive to dice roll
-    - delegates to current player.move()
- - GetFinalPosition(position) -> position
+    - delegates to currentPlayer.move()
+ - int GetFinalPosition(int position)
     - reactive to player positions
     - delegates to board.GetFinalPosition(position)
+    - sets player position using SetPosition(position) API
 
-Dice
+Dice - static class
  - public Roll() -> int - observed by Game
 
 Board
+ - public Board(int size, BoardObject[])
  - size
- - BoardObjects[] -> interface for snakes and ladders
- - internal GetFinalPosition(position) -> position
+ - BoardObject[] -> interface for snakes and ladders
+ - internal int GetFinalPosition(int position)
     - looks like recursive function
 
+BoardObject
+ - public int Start
+ - public int End
+ - public static BoardObject CreateSnake(int start, int end)
+ - public static BoardObject CreateLadder(int start, int end)
+
 Snake
- - (start and end positions)[]
- - GetFinalPosition(position) -> position
+ - private Snake(Position start, Position end)
 
 Ladder
- - (start and end positions)[]
- - GetFinalPosition(position) -> position
+ - private Ladder(Position start, Position end)
+
+Players
+ - public Players(Player[] players)
+ - Player[] players
+ - int currentPlayerIndex
+ - public Player GetCurrentPlayer()
+ - public void GiveTurnToNextPlayer()
 
 Player
- - Name
- - Position - observed by Game
+ - public Player(string name)
+ - string Name
+ - int Position - observed by Game
  - internal Move(count)
- - internal SetPosition(Position)
-
-Position
- - x
- - y
+ - internal SetPosition(position)
