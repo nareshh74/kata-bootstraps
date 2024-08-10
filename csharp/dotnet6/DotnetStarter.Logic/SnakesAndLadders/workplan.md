@@ -1,3 +1,5 @@
+https://workat.tech/machine-coding/practice/snake-and-ladder-problem-zgtac9lxwntg
+
 snakes and ladder
 
 i/p => 
@@ -37,7 +39,7 @@ Game
  - public GiveTurnToNextPlayer()
     - delegates to Players.GiveTurnToNextPlayer()
  - public bool HasEnded()
- - private void MoveCurrentPlayer(int count)
+ - public void MoveCurrentPlayer(int count)
     - reactive to dice roll
     - delegates to currentPlayer.move()
  - int GetFinalPosition(int position)
@@ -46,7 +48,7 @@ Game
     - sets player position using SetPosition(position) API
 
 Dice - static class
- - public Roll() -> int - observed by Game
+ - public int Roll()
 
 Board
  - public Board(int size, BoardObject[])
