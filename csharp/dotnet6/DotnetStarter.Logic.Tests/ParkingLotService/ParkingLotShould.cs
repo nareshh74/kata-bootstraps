@@ -183,13 +183,13 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 var vehicle = new Vehicle("ABC123", vehicleType, "Black");
 
                 // Act and Assert
-                Assert.Equal(parkingLot.GetFreeSlot(vehicleType), beforeParking);
+                Assert.Equal(parkingLot.GetFreeSlots(vehicleType), beforeParking);
 
                 // Arrange
                 parkingLot.Park(vehicle);
 
                 // Act and Assert
-                Assert.Equal(parkingLot.GetFreeSlot(vehicleType), afterParking);
+                Assert.Equal(parkingLot.GetFreeSlots(vehicleType), afterParking);
             }
         }
 

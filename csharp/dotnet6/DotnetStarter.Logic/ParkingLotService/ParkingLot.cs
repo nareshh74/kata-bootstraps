@@ -156,11 +156,11 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public Dictionary<int, int> GetFreeSlotCount(VehicleType vehicleType)
         {
-            var freeSlots = this.GetFreeSlot(vehicleType);
+            var freeSlots = this.GetFreeSlots(vehicleType);
             return freeSlots.ToDictionary(floor => floor.Key, floor => floor.Value.Count);
         }
 
-        public Dictionary<int, List<int>> GetFreeSlot(VehicleType vehicleType)
+        public Dictionary<int, List<int>> GetFreeSlots(VehicleType vehicleType)
         {
             return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetFreeSlots(vehicleType));
         }
