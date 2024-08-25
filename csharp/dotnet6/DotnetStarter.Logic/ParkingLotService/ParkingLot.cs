@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DotnetStarter.Logic.ParkingLotService
 {
@@ -85,6 +86,11 @@ namespace DotnetStarter.Logic.ParkingLotService
                 }
                 return null;
             }
+
+            public int GetFreeSlotCount(VehicleType vehicleType)
+            {
+                return this._slots.Count(slot => slot.CanParkVehicle(new Vehicle(null, vehicleType, null)));
+            }
         }
 
         internal class ParkingSlot
@@ -130,6 +136,16 @@ namespace DotnetStarter.Logic.ParkingLotService
                 this._vehicle = null;
                 return vehicle;
             }
+        }
+
+        public Dictionary<int, int> GetFreeSlotCount(VehicleType vehicleType)
+        {
+            var freeSlotCount = new Dictionary<int, int>();
+            foreach (var floor in this._floors)
+            {
+                freeSlotCount.Add(floor.Id, floor.GetFreeSlotCount(vehicleType));
+            }
+            return freeSlotCount;
         }
     }
 

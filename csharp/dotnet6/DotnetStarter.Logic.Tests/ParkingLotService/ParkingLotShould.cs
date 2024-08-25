@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DotnetStarter.Logic.ParkingLotService;
 using Xunit;
 
@@ -83,6 +84,44 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
 
                 // Assert
                 Assert.Null(unparkedVehicle);
+            }
+        }
+
+        public class GetFreeSlotCountShould
+        {
+            public static IEnumerable<object[]> ReturnExpectedFreeSlotCountParameters =>
+                new List<object[]>
+                {
+                    new object[] { VehicleType.Truck, new int[] { 1, 1 }, new int[] { 0, 1 } },
+                    new object[] { VehicleType.Bike, new int[] { 2, 2 }, new int[] { 1, 2 } },
+                    new object[] { VehicleType.Car, new int[] { 3, 3 }, new int[] { 2, 3 } }
+                };
+
+            [Theory, MemberData(nameof(GetFreeSlotCountShould.ReturnExpectedFreeSlotCountParameters))]
+            public void Return_expected_free_slot_count(VehicleType vehicleType, int[] beforeParking, int[] afterParking)
+            {
+                // Arrange
+                const int floorCount = 2;
+                var lot = new ParkingLot("PR1234", floorCount, 6);
+                var expectedBeforeParkingResult = new Dictionary<int, int>();
+                for (var i = 0; i < floorCount; i++)
+                {
+                    expectedBeforeParkingResult.Add(i + 1, beforeParking[i]);
+                }
+                var expectedAfterParkingResult = new Dictionary<int, int>();
+                for (var i = 0; i < floorCount; i++)
+                {
+                    expectedAfterParkingResult.Add(i + 1, afterParking[i]);
+                }
+
+                // Assert
+                Assert.Equal(lot.GetFreeSlotCount(vehicleType), expectedBeforeParkingResult);
+
+                // Arrange
+                lot.Park(new Vehicle("ABC123", vehicleType, "Black"));
+
+                // Act
+                Assert.Equal(lot.GetFreeSlotCount(vehicleType), expectedAfterParkingResult);
             }
         }
     }
