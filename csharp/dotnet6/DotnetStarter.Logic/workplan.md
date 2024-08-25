@@ -43,7 +43,7 @@ The above will be printed for each floor.
  - slot allocation should be done based on vehicle type
 
  **optional**
- - additional vehicle types and slot types
- - different strategies for slot allocation
- - multiple parking lots with different i/p and o/p formats
- - thread safety
+ - additional vehicle types and slot types - *seperate type for maintaining vehicle types*
+ - different strategies for slot allocation - *strategy pattern for slot allocation*
+ - multiple parking lots with different i/p and o/p formats - *seperate class for dealing with i/p and o/p - polymorphism*
+ - thread safety - *risk of using same slot for multiple vehicles - use locking*
