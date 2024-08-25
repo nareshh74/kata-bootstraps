@@ -266,7 +266,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
         public class ParkShould
         {
             [Fact]
-            public void Allow_to_park_car_and_return_ticket_as_expected()
+            public void Print_ticket_as_expected_when_parked()
             {
                 // Arrange
                 var parkingLot = new ParkingLot("PR1234", 1, 1);
@@ -286,7 +286,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
             }
 
             [Fact]
-            public void Not_allow_to_park_car_when_no_slot_available()
+            public void Print_ticket_as_expected_when_slot_full()
             {
                 // Arrange
                 var parkingLot = new ParkingLot("PR1234", 1, 1);
@@ -309,7 +309,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
             [Theory]
             [InlineData(VehicleType.Car)]
             [InlineData(VehicleType.Bike)]
-            public void Not_allow_to_park_car_when_no_slot_available_for_vehicle_type(VehicleType vehicleType)
+            public void Print_ticket_as_expected_when_vehicletype_not_compatible(VehicleType vehicleType)
             {
                 // Arrange
                 var parkingLot = new ParkingLot("PR1234", 1, 1);
@@ -326,7 +326,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
         public class UnParkShould
         {
             [Fact]
-            public void Allow_to_unpark_car_for_valid_ticket()
+            public void Print_vehicle_when_unparked()
             {
                 // Arrange
                 var parkingLot = new ParkingLot("PR1234", 1, 1);
@@ -346,7 +346,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
             }
 
             [Fact]
-            public void Not_allow_to_unpark_car_when_ticket_is_invalid()
+            public void Print_as_expected_when_ticket_invalid()
             {
                 // Arrange
                 var parkingLot = new ParkingLot("PR1234", 1, 1);
