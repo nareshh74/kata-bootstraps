@@ -192,5 +192,70 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 Assert.Equal(parkingLot.GetFreeSlot(vehicleType), afterParking);
             }
         }
+
+        public class GetOccupiedSlotsShould
+        {
+            public static IEnumerable<object[]> ReturnExpectedOccupiedSlotsParameters =>
+                new List<object[]>
+                {
+                    new object[]
+                    {
+                        VehicleType.Truck,
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>() },
+                            { 2, new List<int>() }
+                        },
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 1 } },
+                            { 2, new List<int>() }
+                        }
+                    },
+                    new object[]
+                    {
+                        VehicleType.Bike,
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>() },
+                            { 2, new List<int>()  }
+                        },
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 2 } },
+                            { 2, new List<int>() }
+                        }
+                    },
+                    new object[]
+                    {
+                        VehicleType.Car,
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>() },
+                            { 2, new List<int>() }
+                        },
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 4 } },
+                            { 2, new List<int>() }
+                        }
+                    }
+                };
+            [Theory, MemberData(nameof(GetOccupiedSlotsShould.ReturnExpectedOccupiedSlotsParameters))]
+            public void Return_occupied_slots_as_expected(VehicleType vehicleType, Dictionary<int, List<int>> beforeParking, Dictionary<int, List<int>> afterParking)
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 2, 6);
+
+                // Act and Assert
+                Assert.Equal(parkingLot.GetOccupiedSlots(), beforeParking);
+
+                // Arrange
+                parkingLot.Park(new Vehicle("ABC123", vehicleType, "Black"));
+
+                // Act and Assert
+                Assert.Equal(parkingLot.GetOccupiedSlots(), afterParking);
+            }
+        }
     }
 }

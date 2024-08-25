@@ -99,6 +99,14 @@ namespace DotnetStarter.Logic.ParkingLotService
                     .Select(slot => slot.Id)
                     .ToList();
             }
+
+            public List<int> GetOccupiedSlots()
+            {
+                return this._slots
+                    .Where(slot => slot.IsOccupied())
+                    .Select(slot => slot.Id)
+                    .ToList();
+            }
         }
 
         internal class ParkingSlot
@@ -155,6 +163,11 @@ namespace DotnetStarter.Logic.ParkingLotService
         public Dictionary<int, List<int>> GetFreeSlot(VehicleType vehicleType)
         {
             return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetFreeSlots(vehicleType));
+        }
+
+        public Dictionary<int, List<int>> GetOccupiedSlots()
+        {
+            return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetOccupiedSlots());
         }
     }
 
