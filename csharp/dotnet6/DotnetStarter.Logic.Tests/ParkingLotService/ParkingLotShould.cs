@@ -363,5 +363,57 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 Assert.True(expected == result, $"Expected: {expected}, Actual: {result}");
             }
         }
+
+        public class GetFreeSlotCountShould
+        {
+            public static IEnumerable<object[]> ReturnExpectedFreeSlotCountParameters =>
+                new List<object[]>
+                {
+                    new object[] { VehicleType.Truck, @"No. of free slots for TRUCK on Floor 1: 1
+No. of free slots for TRUCK on Floor 2: 1", @"No. of free slots for TRUCK on Floor 1: 0
+No. of free slots for TRUCK on Floor 2: 1" },
+                    new object[] { VehicleType.Bike, @"No. of free slots for BIKE on Floor 1: 2
+No. of free slots for BIKE on Floor 2: 2", @"No. of free slots for BIKE on Floor 1: 1
+No. of free slots for BIKE on Floor 2: 2" },
+                    new object[] { VehicleType.Car, @"No. of free slots for CAR on Floor 1: 3
+No. of free slots for CAR on Floor 2: 3", @"No. of free slots for CAR on Floor 1: 2
+No. of free slots for CAR on Floor 2: 3" }
+                };
+
+            [Theory, MemberData(nameof(GetFreeSlotCountShould.ReturnExpectedFreeSlotCountParameters))]
+            public void Print_expected_free_slot_count(VehicleType vehicleType, string beforeParking, string afterParking)
+            {
+                // Arrange
+                const int floorCount = 2;
+                var lot = new ParkingLot("PR1234", floorCount, 6);
+                var lotWithDisplay = new ParkingLotWithDisplay(lot);
+                using (StringWriter sw = new())
+                {
+                    Console.SetOut(sw);
+
+                    // Assert
+                    lotWithDisplay.GetFreeSlotCount(vehicleType);
+                    var result = sw.ToString().Trim();
+                    Assert.True(beforeParking == result, $"Expected: {beforeParking}, Actual: {result}");
+
+                    // Arrange
+                    lotWithDisplay.Park(new Vehicle("ABC123", vehicleType, "Black"));
+                }
+
+                using (StringWriter sw = new())
+                {
+                    Console.SetOut(sw);
+
+                    // Act
+                    lotWithDisplay.GetFreeSlotCount(vehicleType);
+
+                    // Assert
+                    var result = sw.ToString().Trim();
+                    Assert.True(afterParking == result, $"Expected: {afterParking}, Actual: {result}");
+                }
+            }
+
+
+        }
     }
 }
