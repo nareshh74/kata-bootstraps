@@ -100,10 +100,10 @@ namespace DotnetStarter.Logic.ParkingLotService
                     .ToList();
             }
 
-            public List<int> GetOccupiedSlots()
+            public List<int> GetOccupiedSlots(VehicleType vehicleType)
             {
                 return this._slots
-                    .Where(slot => slot.IsOccupied())
+                    .Where(slot => slot.IsOccupied() && slot.OfType(vehicleType))
                     .Select(slot => slot.Id)
                     .ToList();
             }
@@ -137,13 +137,18 @@ namespace DotnetStarter.Logic.ParkingLotService
                 {
                     return false;
                 }
+                return this.OfType(vehicle.VehicleType);
+            }
+
+            public bool OfType(VehicleType vehicleType)
+            {
                 // get vehicle type based on slot id
                 var compatibleVehicleType = this.Id == 1
                     ? VehicleType.Truck
                     : this.Id < 4
                         ? VehicleType.Bike
                         : VehicleType.Car;
-                return vehicle.VehicleType == compatibleVehicleType;
+                return compatibleVehicleType == vehicleType;
             }
 
             public Vehicle Unpark()
@@ -165,9 +170,9 @@ namespace DotnetStarter.Logic.ParkingLotService
             return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetFreeSlots(vehicleType));
         }
 
-        public Dictionary<int, List<int>> GetOccupiedSlots()
+        public Dictionary<int, List<int>> GetOccupiedSlots(VehicleType vehicleType)
         {
-            return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetOccupiedSlots());
+            return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetOccupiedSlots(vehicleType));
         }
     }
 

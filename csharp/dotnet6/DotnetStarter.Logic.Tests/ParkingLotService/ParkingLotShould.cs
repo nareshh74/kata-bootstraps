@@ -248,13 +248,13 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 var parkingLot = new ParkingLot("PR1234", 2, 6);
 
                 // Act and Assert
-                Assert.Equal(parkingLot.GetOccupiedSlots(), beforeParking);
+                Assert.Equal(parkingLot.GetOccupiedSlots(vehicleType), beforeParking);
 
                 // Arrange
                 parkingLot.Park(new Vehicle("ABC123", vehicleType, "Black"));
 
                 // Act and Assert
-                Assert.Equal(parkingLot.GetOccupiedSlots(), afterParking);
+                Assert.Equal(parkingLot.GetOccupiedSlots(vehicleType), afterParking);
             }
         }
     }
