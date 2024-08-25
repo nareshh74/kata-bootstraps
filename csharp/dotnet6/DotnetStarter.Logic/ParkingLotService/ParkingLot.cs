@@ -1,8 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DotnetStarter.Logic.ParkingLotService
 {
+    public class ParkingLotWithDisplay
+    {
+        private readonly ParkingLot _parkingLot;
+
+        public ParkingLotWithDisplay(ParkingLot parkingLot)
+        {
+            this._parkingLot = parkingLot;
+        }
+
+        public void Park(Vehicle vehicle)
+        {
+            var ticket = this._parkingLot.Park(vehicle);
+            Console.WriteLine($"{ticket}");
+        }
+
+        public Vehicle Unpark(Ticket ticket)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Dictionary<int, int> GetFreeSlotCount(VehicleType vehicleType)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Dictionary<int, List<int>> GetFreeSlots(VehicleType vehicleType)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Dictionary<int, List<int>> GetOccupiedSlots(VehicleType vehicleType)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
     public class ParkingLot
     {
         private readonly string _id;
@@ -207,7 +244,7 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public override string ToString()
         {
-            return this.SlotId == null ? "SlotFull" : $"{this.Lotid}_{this.FloorId}_{this.SlotId}";
+            return this.SlotId == null ? "Parking Lot Full" : $"Parked vehicle. Ticket ID: {this.Lotid}_{this.FloorId}_{this.SlotId}";
         }
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using DotnetStarter.Logic.ParkingLotService;
 using Xunit;
 
@@ -20,7 +22,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
 
                 // Assert
                 Assert.NotNull(ticket);
-                Assert.Equal("PR1234_1_1", ticket.ToString());
+                Assert.Equal("Parked vehicle. Ticket ID: PR1234_1_1", ticket.ToString());
             }
 
             [Fact]
@@ -255,6 +257,69 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
 
                 // Act and Assert
                 Assert.Equal(parkingLot.GetOccupiedSlots(vehicleType), afterParking);
+            }
+        }
+    }
+
+    public class ParkingLotWithDisplayShould
+    {
+        public class ParkShould
+        {
+            [Fact]
+            public void Allow_to_park_car_and_return_ticket_as_expected()
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 1, 1);
+                var parkingLotWithDisplay = new ParkingLotWithDisplay(parkingLot);
+                var vehicle = new Vehicle("ABC123", VehicleType.Truck, "Black");
+                var expected = "Parked vehicle. Ticket ID: PR1234_1_1";
+
+                using StringWriter sw = new();
+                Console.SetOut(sw);
+
+                // Act
+                parkingLotWithDisplay.Park(vehicle);
+
+                // Assert
+                var result = sw.ToString();
+                Assert.True(expected == result.Trim(), $"Expected: {expected}, Actual: {result}");
+            }
+
+            [Fact]
+            public void Not_allow_to_park_car_when_no_slot_available()
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 1, 1);
+                var parkingLotWithDisplay = new ParkingLotWithDisplay(parkingLot);
+                var vehicle = new Vehicle("XYZ123", VehicleType.Truck, "Black");
+                var expected = "Parking Lot Full";
+                parkingLotWithDisplay.Park(new Vehicle("ABC123", VehicleType.Truck, "Black"));
+
+                using StringWriter sw = new();
+                Console.SetOut(sw);
+
+                // Act
+                parkingLotWithDisplay.Park(vehicle);
+
+                // Assert
+                var result = sw.ToString();
+                Assert.True(expected == result.Trim(), $"Expected: {expected}, Actual: {result}");
+            }
+
+            [Theory]
+            [InlineData(VehicleType.Car)]
+            [InlineData(VehicleType.Bike)]
+            public void Not_allow_to_park_car_when_no_slot_available_for_vehicle_type(VehicleType vehicleType)
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 1, 1);
+                var vehicle = new Vehicle("XYZ123", vehicleType, "Black");
+
+                // Act
+                var ticket = parkingLot.Park(vehicle);
+
+                // Assert
+                Assert.Equal(ticket.ToString(), Ticket.SlotFull.ToString());
             }
         }
     }
