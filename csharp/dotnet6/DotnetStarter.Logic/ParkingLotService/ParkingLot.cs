@@ -23,7 +23,7 @@ namespace DotnetStarter.Logic.ParkingLotService
         {
             var slot = this.GetAvailableSlotForParking(vehicle);
             slot?.Park(vehicle);
-            var ticket = new Ticket(this._id, slot?.FloorId, slot?.Id);
+            var ticket = Ticket.Create(this._id, slot?.FloorId, slot?.Id);
             this._issuedTickets.Add(ticket);
             return ticket;
         }
@@ -129,10 +129,21 @@ namespace DotnetStarter.Logic.ParkingLotService
     public class Ticket
     {
         public string Id { get; }
+        public static Ticket SlotFull => new Ticket(null, null, null);
 
-        public Ticket(string lotId, int? floorId, int? slotId)
+        public static Ticket Create(string lotId, int? floorId, int? slotId)
+        {
+            return slotId == null ? Ticket.SlotFull : new Ticket(lotId, floorId, slotId);
+        }
+
+        private Ticket(string lotId, int? floorId, int? slotId)
         {
             this.Id = $"{lotId}_{floorId}_{slotId}";
+        }
+
+        public override string ToString()
+        {
+            return this.Id;
         }
     }
 }
