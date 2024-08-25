@@ -28,6 +28,20 @@ namespace DotnetStarter.Logic.ParkingLotService
             return ticket;
         }
 
+        public Vehicle Unpark(Ticket ticket)
+        {
+            if (!this._issuedTickets.Contains(ticket))
+            {
+                return null;
+            }
+            var slotId = ticket.SlotId ?? 0;
+            var floorId = ticket.FloorId ?? 0;
+            var slot = this._floors[floorId - 1].GetSlot(slotId);
+            var vehicle = slot.Unpark();
+            this._issuedTickets.Remove(ticket);
+            return vehicle;
+        }
+
         private ParkingSlot GetAvailableSlotForParking(Vehicle vehicle)
         {
             foreach (var floor in this._floors)
@@ -46,6 +60,8 @@ namespace DotnetStarter.Logic.ParkingLotService
             public string LotId { get; }
             public int Id { get; }
             private readonly List<ParkingSlot> _slots;
+
+            public ParkingSlot GetSlot(int slotId) => this._slots[slotId - 1];
 
             public ParkingFloor(string lotId, int id, int slotsPerFloor)
             {
@@ -107,6 +123,13 @@ namespace DotnetStarter.Logic.ParkingLotService
                         : VehicleType.Car;
                 return vehicle.VehicleType == compatibleVehicleType;
             }
+
+            public Vehicle Unpark()
+            {
+                var vehicle = this._vehicle;
+                this._vehicle = null;
+                return vehicle;
+            }
         }
     }
 
@@ -128,7 +151,6 @@ namespace DotnetStarter.Logic.ParkingLotService
 
     public class Ticket
     {
-        public string Id { get; }
         public static Ticket SlotFull => new Ticket(null, null, null);
 
         public static Ticket Create(string lotId, int? floorId, int? slotId)
@@ -138,12 +160,19 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         private Ticket(string lotId, int? floorId, int? slotId)
         {
-            this.Id = $"{lotId}_{floorId}_{slotId}";
+            this.Lotid = lotId;
+            this.FloorId = floorId;
+            this.SlotId = slotId;
         }
+
+        public int? FloorId { get; }
+        public int? SlotId { get; }
+
+        public string Lotid { get; }
 
         public override string ToString()
         {
-            return this.Id;
+            return this.SlotId == null ? "SlotFull" : $"{this.Lotid}_{this.FloorId}_{this.SlotId}";
         }
     }
 }
