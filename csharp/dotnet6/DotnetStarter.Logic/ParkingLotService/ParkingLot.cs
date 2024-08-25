@@ -13,15 +13,18 @@ namespace DotnetStarter.Logic.ParkingLotService
             this._parkingLot = parkingLot;
         }
 
-        public void Park(Vehicle vehicle)
+        public Ticket Park(Vehicle vehicle)
         {
             var ticket = this._parkingLot.Park(vehicle);
             Console.WriteLine($"{ticket}");
+            return ticket;
         }
 
         public Vehicle Unpark(Ticket ticket)
         {
-            throw new System.NotImplementedException();
+            var vehicle = this._parkingLot.Unpark(ticket);
+            Console.WriteLine(vehicle == null ? "Invalid Ticket" : $"Unparked vehicle with Registration Number: {vehicle.RegistrationNumber} and Color: {vehicle.Color}");
+            return vehicle;
         }
 
         public Dictionary<int, int> GetFreeSlotCount(VehicleType vehicleType)
@@ -208,10 +211,14 @@ namespace DotnetStarter.Logic.ParkingLotService
     public class Vehicle
     {
         public VehicleType VehicleType { get; }
+        public string Color { get; }
+        public string RegistrationNumber { get; }
 
         public Vehicle(string licensePlate, VehicleType vehicleType, string color)
         {
             this.VehicleType = vehicleType;
+            this.Color = color;
+            this.RegistrationNumber = licensePlate;
         }
     }
 

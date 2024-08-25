@@ -322,5 +322,46 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 Assert.Equal(ticket.ToString(), Ticket.SlotFull.ToString());
             }
         }
+
+        public class UnParkShould
+        {
+            [Fact]
+            public void Allow_to_unpark_car_for_valid_ticket()
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 1, 1);
+                var parkingLotWithDisplay = new ParkingLotWithDisplay(parkingLot);
+                var vehicle = new Vehicle("ABC123", VehicleType.Truck, "Black");
+                var ticket = parkingLotWithDisplay.Park(vehicle);
+                using StringWriter sw = new();
+                Console.SetOut(sw);
+                var expected = $"Unparked vehicle with Registration Number: {vehicle.RegistrationNumber} and Color: {vehicle.Color}";
+
+                // Act
+                parkingLotWithDisplay.Unpark(ticket);
+
+                // Assert
+                var result = sw.ToString().Trim();
+                Assert.True(expected == result, $"Expected: {expected}, Actual: {result}");
+            }
+
+            [Fact]
+            public void Not_allow_to_unpark_car_when_ticket_is_invalid()
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 1, 1);
+                var parkingLotWithDisplay = new ParkingLotWithDisplay(parkingLot);
+                using StringWriter sw = new();
+                Console.SetOut(sw);
+                const string expected = "Invalid Ticket";
+
+                // Act
+                parkingLotWithDisplay.Unpark(Ticket.Create("PR1234", 1, 1));
+
+                // Assert
+                var result = sw.ToString().Trim();
+                Assert.True(expected == result, $"Expected: {expected}, Actual: {result}");
+            }
+        }
     }
 }
