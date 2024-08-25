@@ -87,23 +87,11 @@ namespace DotnetStarter.Logic.ParkingLotService
                 return null;
             }
 
-            public int GetFreeSlotCount(VehicleType vehicleType)
-            {
-                return this.GetFreeSlots(vehicleType).Count;
-            }
-
-            public List<int> GetFreeSlots(VehicleType vehicleType)
+            public List<int> GetSlots(VehicleType vehicleType, bool isOccupied)
             {
                 return this._slots
-                    .Where(slot => slot.CanParkVehicle(new Vehicle(null, vehicleType, null)))
-                    .Select(slot => slot.Id)
-                    .ToList();
-            }
-
-            public List<int> GetOccupiedSlots(VehicleType vehicleType)
-            {
-                return this._slots
-                    .Where(slot => slot.IsOccupied() && slot.OfType(vehicleType))
+                    .Where(slot => slot.IsOccupied() == isOccupied
+                                   && slot.OfType(vehicleType))
                     .Select(slot => slot.Id)
                     .ToList();
             }
@@ -161,18 +149,22 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public Dictionary<int, int> GetFreeSlotCount(VehicleType vehicleType)
         {
-            var freeSlots = this.GetFreeSlots(vehicleType);
-            return freeSlots.ToDictionary(floor => floor.Key, floor => floor.Value.Count);
+            return this.GetSlots(vehicleType, false).ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Count);
         }
 
         public Dictionary<int, List<int>> GetFreeSlots(VehicleType vehicleType)
         {
-            return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetFreeSlots(vehicleType));
+            return this.GetSlots(vehicleType, false);
         }
 
         public Dictionary<int, List<int>> GetOccupiedSlots(VehicleType vehicleType)
         {
-            return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetOccupiedSlots(vehicleType));
+            return this.GetSlots(vehicleType, true);
+        }
+
+        private Dictionary<int, List<int>> GetSlots(VehicleType vehicleType, bool isOccupied)
+        {
+            return this._floors.ToDictionary(floor => floor.Id, floor => floor.GetSlots(vehicleType, isOccupied));
         }
     }
 
