@@ -124,5 +124,73 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 Assert.Equal(lot.GetFreeSlotCount(vehicleType), expectedAfterParkingResult);
             }
         }
+
+        public class GetFreeSlotShould
+        {
+            public static IEnumerable<object[]> ReturnExpectedFreeSlotParameters =>
+                new List<object[]>
+                {
+                    new object[]
+                    {
+                        VehicleType.Truck,
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 1 } },
+                            { 2, new List<int>() { 1 } }
+                        },
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>() },
+                            { 2, new List<int>() { 1 } }
+                        }
+                    },
+                    new object[]
+                    {
+                        VehicleType.Bike,
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 2, 3 } },
+                            { 2, new List<int>() { 2, 3 } }
+                        },
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 3 } },
+                            { 2, new List<int>() { 2, 3 } }
+                        },
+                    },
+                    new object[]
+                    {
+                        VehicleType.Car,
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 4, 5, 6 } },
+                            { 2, new List<int>() { 4, 5, 6 } }
+                        },
+                        new Dictionary<int, List<int>>()
+                        {
+                            { 1, new List<int>(){ 5, 6 } },
+                            { 2, new List<int>() { 4, 5, 6 } }
+                        }
+                    }
+                };
+            [Theory, MemberData(nameof(GetFreeSlotShould.ReturnExpectedFreeSlotParameters))]
+            public void Return_free_slot_as_expected(VehicleType vehicleType,
+                Dictionary<int, List<int>> beforeParking,
+                Dictionary<int, List<int>> afterParking)
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 2, 6);
+                var vehicle = new Vehicle("ABC123", vehicleType, "Black");
+
+                // Act and Assert
+                Assert.Equal(parkingLot.GetFreeSlot(vehicleType), beforeParking);
+
+                // Arrange
+                parkingLot.Park(vehicle);
+
+                // Act and Assert
+                Assert.Equal(parkingLot.GetFreeSlot(vehicleType), afterParking);
+            }
+        }
     }
 }
