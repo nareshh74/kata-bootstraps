@@ -89,7 +89,7 @@ namespace DotnetStarter.Logic.ParkingLotService
 
             public int GetFreeSlotCount(VehicleType vehicleType)
             {
-                return this._slots.Count(slot => slot.CanParkVehicle(new Vehicle(null, vehicleType, null)));
+                return this.GetFreeSlots(vehicleType).Count;
             }
 
             public List<int> GetFreeSlots(VehicleType vehicleType)
@@ -148,12 +148,8 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public Dictionary<int, int> GetFreeSlotCount(VehicleType vehicleType)
         {
-            var freeSlotCount = new Dictionary<int, int>();
-            foreach (var floor in this._floors)
-            {
-                freeSlotCount.Add(floor.Id, floor.GetFreeSlotCount(vehicleType));
-            }
-            return freeSlotCount;
+            var freeSlots = this.GetFreeSlot(vehicleType);
+            return freeSlots.ToDictionary(floor => floor.Key, floor => floor.Value.Count);
         }
 
         public Dictionary<int, List<int>> GetFreeSlot(VehicleType vehicleType)
