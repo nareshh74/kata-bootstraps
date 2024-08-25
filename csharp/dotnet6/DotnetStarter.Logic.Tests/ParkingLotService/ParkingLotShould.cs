@@ -34,5 +34,21 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
             // Assert
             Assert.Equal(ticket.ToString(), Ticket.SlotFull.ToString());
         }
+
+        [Theory]
+        [InlineData(VehicleType.Car)]
+        [InlineData(VehicleType.Bike)]
+        public void Not_allow_to_park_car_when_no_slot_available_for_vehicle_type(VehicleType vehicleType)
+        {
+            // Arrange
+            var parkingLot = new ParkingLot("PR1234", 1, 1);
+            var vehicle = new Vehicle("XYZ123", vehicleType, "Black");
+
+            // Act
+            var ticket = parkingLot.Park(vehicle);
+
+            // Assert
+            Assert.Equal(ticket.ToString(), Ticket.SlotFull.ToString());
+        }
     }
 }
