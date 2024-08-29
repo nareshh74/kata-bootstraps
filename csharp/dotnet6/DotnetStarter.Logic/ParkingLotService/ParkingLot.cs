@@ -8,9 +8,10 @@ namespace DotnetStarter.Logic.ParkingLotService
     {
         private readonly ParkingLot _parkingLot;
 
-        public ParkingLotWithDisplay(ParkingLot parkingLot)
+        public ParkingLotWithDisplay(string id, int floors, int slotsPerFloor)
         {
-            this._parkingLot = parkingLot;
+            this._parkingLot = new ParkingLot(id, floors, slotsPerFloor);
+            Console.WriteLine($"Created parking lot with {floors} floors and {slotsPerFloor} slots per floor");
         }
 
         public Ticket Park(Vehicle vehicle)
