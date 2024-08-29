@@ -415,5 +415,74 @@ No. of free slots for CAR on Floor 2: 3" }
 
 
         }
+
+        public class GetFreeSlotShould
+        {
+            public static IEnumerable<object[]> ReturnExpectedFreeSlotParameters =>
+                new List<object[]>
+                {
+                    new object[]
+                    {
+                        VehicleType.Truck,
+                        @"Free slots for TRUCK on Floor 1: 1
+Free slots for TRUCK on Floor 2: 1",
+                        @"Free slots for TRUCK on Floor 1: 
+Free slots for TRUCK on Floor 2: 1"
+                    },
+                    new object[]
+                    {
+                        VehicleType.Car,
+                        @"Free slots for CAR on Floor 1: 4,5,6
+Free slots for CAR on Floor 2: 4,5,6",
+                        @"Free slots for CAR on Floor 1: 5,6
+Free slots for CAR on Floor 2: 4,5,6"
+                    },
+                    new object[]
+                    {
+                        VehicleType.Bike,
+                        @"Free slots for BIKE on Floor 1: 2,3
+Free slots for BIKE on Floor 2: 2,3",
+                        @"Free slots for BIKE on Floor 1: 3
+Free slots for BIKE on Floor 2: 2,3"
+                    }
+                };
+            [Theory, MemberData(nameof(GetFreeSlotShould.ReturnExpectedFreeSlotParameters))]
+            public void Return_free_slot_as_expected(VehicleType vehicleType,
+                string beforeParking,
+                string afterParking)
+            {
+                // Arrange
+                var lot = new ParkingLot("PR1234", 2, 6);
+                var lotWithDisplay = new ParkingLotWithDisplay(lot);
+                var vehicle = new Vehicle("ABC123", vehicleType, "Black");
+
+                using (StringWriter sw = new())
+                {
+                    Console.SetOut(sw);
+
+                    // Act
+                    lotWithDisplay.GetFreeSlots(vehicleType);
+                    var result = sw.ToString().Trim();
+
+                    // Assert
+                    Assert.True(beforeParking == result, $"Expected: {beforeParking}, Actual: {result}");
+
+                    // Arrange
+                    lotWithDisplay.Park(vehicle);
+                }
+
+                using (StringWriter sw = new())
+                {
+                    Console.SetOut(sw);
+
+                    // Act
+                    lotWithDisplay.GetFreeSlots(vehicleType);
+                    var result = sw.ToString().Trim();
+
+                    // Assert
+                    Assert.True(afterParking == result, $"Expected: {afterParking}, Actual: {result}");
+                }
+            }
+        }
     }
 }

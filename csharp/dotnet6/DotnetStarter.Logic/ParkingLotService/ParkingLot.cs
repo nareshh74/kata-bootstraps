@@ -39,7 +39,12 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public Dictionary<int, List<int>> GetFreeSlots(VehicleType vehicleType)
         {
-            throw new System.NotImplementedException();
+            var freeSlots = this._parkingLot.GetFreeSlots(vehicleType);
+            foreach (var kvp in freeSlots)
+            {
+                Console.WriteLine($"Free slots for {vehicleType.ToString().ToUpper()} on Floor {kvp.Key}: {string.Join(",", kvp.Value)}");
+            }
+            return freeSlots;
         }
 
         public Dictionary<int, List<int>> GetOccupiedSlots(VehicleType vehicleType)
