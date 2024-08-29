@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using DotnetStarter.Logic.ParkingLotService;
 using Xunit;
 
@@ -23,6 +24,31 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
                 // Assert
                 Assert.NotNull(ticket);
                 Assert.Equal("Parked vehicle. Ticket ID: PR1234_1_1", ticket.ToString());
+            }
+
+            [Fact]
+            public void Handle_parallel_parking_requests()
+            {
+                // Arrange
+                var parkingLot = new ParkingLot("PR1234", 2, 1);
+                var vehicle1 = new Vehicle("ABC123", VehicleType.Truck, "Black");
+                var vehicle2 = new Vehicle("XYZ123", VehicleType.Truck, "Black");
+                var vehicle3 = new Vehicle("PQR123", VehicleType.Truck, "Black");
+                var vehicles = new List<Vehicle> { vehicle1, vehicle2, vehicle3 };
+                var expected = new Dictionary<Vehicle, string>()
+                {
+                    { vehicle1, "Parked vehicle. Ticket ID: PR1234_1_1" },
+                    { vehicle2, "Parked vehicle. Ticket ID: PR1234_2_1" },
+                    { vehicle3, Ticket.SlotFull.ToString() }
+                };
+
+                // Act
+                Parallel.ForEach(vehicles, vehicle =>
+                {
+                    var ticket = parkingLot.Park(vehicle);
+                    Assert.NotNull(ticket);
+                    Assert.Equal(expected[vehicle], ticket.ToString());
+                });
             }
 
             [Fact]

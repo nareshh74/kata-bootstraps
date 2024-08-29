@@ -64,6 +64,7 @@ namespace DotnetStarter.Logic.ParkingLotService
         private readonly string _id;
         private readonly List<ParkingFloor> _floors;
         private HashSet<Ticket> _issuedTickets;
+        private static object _lockObject = new object();
 
         public ParkingLot(string id, int floorCount, int slotsPerFloor)
         {
@@ -78,11 +79,14 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public Ticket Park(Vehicle vehicle)
         {
-            var slot = this.GetAvailableSlotForParking(vehicle);
-            slot?.Park(vehicle);
-            var ticket = Ticket.Create(this._id, slot?.FloorId, slot?.Id);
-            this._issuedTickets.Add(ticket);
-            return ticket;
+            lock (ParkingLot._lockObject)
+            {
+                var slot = this.GetAvailableSlotForParking(vehicle);
+                slot?.Park(vehicle);
+                var ticket = Ticket.Create(this._id, slot?.FloorId, slot?.Id);
+                this._issuedTickets.Add(ticket);
+                return ticket;
+            }
         }
 
         public Vehicle Unpark(Ticket ticket)
