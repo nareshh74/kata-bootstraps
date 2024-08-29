@@ -485,5 +485,73 @@ Free slots for BIKE on Floor 2: 2,3"
                 }
             }
         }
+
+        public class GetOccupiedSlotsShould
+        {
+            public static IEnumerable<object[]> ReturnExpectedOccupiedSlotsParameters =>
+                new List<object[]>
+                {
+                    new object[]
+                    {
+                        VehicleType.Truck,
+                        @"Occupied slots for TRUCK on Floor 1: 
+Occupied slots for TRUCK on Floor 2: ",
+                        @"Occupied slots for TRUCK on Floor 1: 1
+Occupied slots for TRUCK on Floor 2: "
+                    },
+                    new object[]
+                    {
+                        VehicleType.Car,
+                        @"Occupied slots for CAR on Floor 1: 
+Occupied slots for CAR on Floor 2: ",
+                        @"Occupied slots for CAR on Floor 1: 4
+Occupied slots for CAR on Floor 2: "
+                    },
+                    new object[]
+                    {
+                        VehicleType.Bike,
+                        @"Occupied slots for BIKE on Floor 1: 
+Occupied slots for BIKE on Floor 2: ",
+                        @"Occupied slots for BIKE on Floor 1: 2
+Occupied slots for BIKE on Floor 2: "
+                    }
+                };
+
+            [Theory, MemberData(nameof(GetOccupiedSlotsShould.ReturnExpectedOccupiedSlotsParameters))]
+            public void Return_occupied_slots_as_expected(VehicleType vehicleType, string beforeParking,
+                string afterParking)
+            {
+                // Arrange
+                var lot = new ParkingLot("PR1234", 2, 6);
+                var lotWithDisplay = new ParkingLotWithDisplay(lot);
+
+                using (StringWriter sw = new())
+                {
+                    Console.SetOut(sw);
+
+                    // Act
+                    lotWithDisplay.GetOccupiedSlots(vehicleType);
+                    var result = sw.ToString().Trim();
+
+                    // Assert
+                    Assert.True(beforeParking.Trim() == result, $"Expected: {beforeParking}, Actual: {result}");
+
+                    // Arrange
+                    lotWithDisplay.Park(new Vehicle("ABC123", vehicleType, "Black"));
+                }
+
+                using (StringWriter sw = new())
+                {
+                    Console.SetOut(sw);
+
+                    // Act
+                    lotWithDisplay.GetOccupiedSlots(vehicleType);
+                    var result = sw.ToString().Trim();
+
+                    // Assert
+                    Assert.True(afterParking.Trim() == result, $"Expected: {afterParking}, Actual: {result}");
+                }
+            }
+        }
     }
 }

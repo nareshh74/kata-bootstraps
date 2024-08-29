@@ -49,7 +49,12 @@ namespace DotnetStarter.Logic.ParkingLotService
 
         public Dictionary<int, List<int>> GetOccupiedSlots(VehicleType vehicleType)
         {
-            throw new System.NotImplementedException();
+            var occupiedSlots = this._parkingLot.GetOccupiedSlots(vehicleType);
+            foreach (var kvp in occupiedSlots)
+            {
+                Console.WriteLine($"Occupied slots for {vehicleType.ToString().ToUpper()} on Floor {kvp.Key}: {string.Join(",", kvp.Value)}");
+            }
+            return occupiedSlots;
         }
     }
 
