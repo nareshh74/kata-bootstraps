@@ -261,6 +261,7 @@ namespace DotnetStarter.Logic.Tests.ParkingLotService
         }
     }
 
+    // running all tests in this class at once, will fail because of the Console.WriteLine statements
     public class ParkingLotWithDisplayShould
     {
         public class ParkShould
