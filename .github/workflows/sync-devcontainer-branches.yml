@@ -1,0 +1,136 @@
+name: Sync devcontainer folders to per-folder branches
+
+on:
+  push:
+    branches: [ master ] # change to main if needed
+  workflow_dispatch:
+    inputs:
+      always_sync:
+        description: "If true, push ALL <lang>/<framework> folders that contain .devcontainer. If false, push only changed folders."
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+env:
+  ALWAYS_SYNC: ${{ github.event.inputs.always_sync || 'false' }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine folders to sync
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="$GITHUB_WORKSPACE"
+          MODE="${ALWAYS_SYNC,,}"
+
+          kept=()
+
+          if [[ "$MODE" == "true" ]]; then
+            # All <lang>/<framework> dirs (depth 2) that contain .devcontainer
+            while IFS= read -r pair; do
+              [[ -z "$pair" ]] && continue
+              if [[ -e "$REPO/$pair/.devcontainer" ]]; then
+                kept+=("$pair")
+              fi
+            done < <(find "$REPO" -mindepth 2 -maxdepth 2 -type d -printf "%P\n" | sort -u)
+          else
+            BEFORE="${{ github.event.before }}"
+            AFTER="${{ github.sha }}"
+
+            if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
+              BEFORE="$(git -C "$REPO" rev-parse "$AFTER^" 2>/dev/null || true)"
+            fi
+
+            if [[ -z "${BEFORE:-}" ]]; then
+              echo "No valid BEFORE commit; nothing to do."
+              echo "pairs=" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            mapfile -t files < <(git -C "$REPO" diff --name-only "$BEFORE" "$AFTER" || true)
+
+            pairs="$(printf "%s\n" "${files[@]}" \
+              | awk -F/ 'NF>=2 {print $1"/"$2}' \
+              | sort -u)"
+
+            while IFS= read -r pair; do
+              [[ -z "$pair" ]] && continue
+              if [[ -e "$REPO/$pair/.devcontainer" ]]; then
+                kept+=("$pair")
+              fi
+            done <<< "$pairs"
+          fi
+
+          mapfile -t kept_sorted < <(printf "%s\n" "${kept[@]:-}" | sort -u)
+
+          echo "Folders with .devcontainer to sync:"
+          if [[ ${#kept_sorted[@]} -eq 0 ]]; then
+            echo " - (none)"
+          else
+            printf " - %s\n" "${kept_sorted[@]}"
+          fi
+
+          {
+            echo "pairs<<EOF"
+            printf "%s\n" "${kept_sorted[@]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Sync folders to <lang>-<framework> branches (no history)
+        if: steps.detect.outputs.pairs != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          REPO="$GITHUB_WORKSPACE"
+          cd "$REPO"
+
+          git -C "$REPO" config user.name  "github-actions[bot]"
+          git -C "$REPO" config user.email "github-actions[bot]@users.noreply.github.com"
+
+          while IFS= read -r pair; do
+            [[ -z "$pair" ]] && continue
+
+            lang="${pair%%/*}"
+            fw="${pair##*/}"
+            branch="${lang}-${fw}"
+
+            echo "----"
+            echo "Syncing '$pair' -> '$branch'"
+
+            # Copy source folder content to temp
+            rm -rf /tmp/src
+            mkdir -p /tmp/src
+            rsync -a "$REPO/$pair/" /tmp/src/
+
+            # Create a history-free branch snapshot
+            git -C "$REPO" checkout --orphan "$branch"
+
+            # CRITICAL FIX: wipe working tree (including untracked) but keep .git
+            # This prevents accidentally committing the whole repo.
+            find "$REPO" -mindepth 1 -maxdepth 1 -name ".git" -prune -o -exec rm -rf {} +
+
+            # Copy only the folder content into branch root
+            rsync -a /tmp/src/ "$REPO"/
+
+            git -C "$REPO" add -A
+
+            if git -C "$REPO" diff --cached --quiet; then
+              echo "No changes to commit for '$branch' (skipping push)"
+            else
+              git -C "$REPO" commit -m "Sync ${pair} from master"
+              git -C "$REPO" push --force -u origin "$branch"
+              echo "Pushed '$branch'"
+            fi
+
+            git -C "$REPO" checkout master
+          done <<< "${{ steps.detect.outputs.pairs }}"
